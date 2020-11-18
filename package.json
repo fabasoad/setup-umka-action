@@ -1,11 +1,11 @@
 {
-  "name": "{PROJECT_NAME}",
+  "name": "setup-umka-action",
   "version": "1.0.0",
-  "description": "This GitHub action installs {PROJECT_TITLE}",
+  "description": "This GitHub action installs Umka",
   "main": "dist/index.js",
   "repository": {
     "type": "git",
-    "url": "git@github.com:fabasoad/{PROJECT_NAME}.git"
+    "url": "git@github.com:fabasoad/setup-umka-action.git"
   },
   "scripts": {
     "build": "ncc build -m src/index.ts",
@@ -18,11 +18,13 @@
   },
   "keywords": [
     "actions",
-    "programming-language"
+    "programming-language",
+    "scripting-language",
+    "umka"
   ],
   "author": "Yevhen Fabizhevskyi",
   "license": "MIT",
-  "homepage": "https://github.com/fabasoad/{PROJECT_NAME}#readme",
+  "homepage": "https://github.com/fabasoad/setup-umka-action#readme",
   "dependencies": {
     "@actions/core": "1.2.6",
     "@actions/tool-cache": "1.6.1",
@@ -54,8 +56,8 @@
   "snyk": true,
   "husky": {
     "hooks": {
-      "pre-commit": "git-branch-is -r \"^((?!main).)*$\" && npm run build && git add dist/index.js",
-      "pre-push": "npm run lint && npm test"
+      "pre-commit": "git-branch-is -r \"^((?!main).)*$\" && yarn run build && git add dist/index.js",
+      "pre-push": "yarn run lint && yarn test"
     }
   }
 }

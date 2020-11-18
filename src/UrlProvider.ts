@@ -12,6 +12,7 @@ export default class UrlProvider implements IUrlProvider {
   }
 
   getUrl(): string {
-    return '{PROJECT_URL}' + `${this.version}/${this.builder.build()}.zip`
+    return 'https://github.com/vtereshkov/umka-lang/releases/download/v' +
+      `${this.version}/${this.builder.build()}.zip`
   }
 }

@@ -8,6 +8,7 @@ describe('UrlProvider', () => {
       build: (): string => fileName
     })
     const actual: string = provider.getUrl()
-    expect(actual).toBe('{PROJECT_URL}' + `/${version}/${fileName}.zip`)
+    expect(actual).toBe('https://github.com/vtereshkov/umka-lang/releases/' +
+      `download/v${version}/${fileName}.zip`)
   })
 })
