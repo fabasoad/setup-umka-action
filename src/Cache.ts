@@ -1,3 +1,4 @@
+import { addPath } from '@actions/core'
 import { cacheDir } from '@actions/tool-cache'
 import fs from 'fs'
 import path from 'path'
@@ -6,6 +7,7 @@ import CliExeNameProvider from './CliExeNameProvider'
 import LoggerFactory from './LoggerFactory'
 
 export default class Cache implements ICache {
+  private ap: typeof addPath
   private cd: typeof cacheDir
   private version: string
   private provider: ICliExeNameProvider
@@ -13,9 +15,11 @@ export default class Cache implements ICache {
 
   constructor(
     version: string,
+    ap: typeof addPath = addPath,
     cd: typeof cacheDir = cacheDir,
     provider: ICliExeNameProvider = new CliExeNameProvider(version)) {
     this.version = version
+    this.ap = ap
     this.cd = cd
     this.provider = provider
     this.log = LoggerFactory.create('Cache')
@@ -29,6 +33,6 @@ export default class Cache implements ICache {
     const cachedPath = await this.cd(
       folderPath, this.provider.getExeFileName(), this.version)
     this.log.info(`Cached dir is ${cachedPath}`)
-    console.log(`"${cacheDir}" >> $GITHUB_PATH`)
+    this.ap(cachedPath)
   }
 }
