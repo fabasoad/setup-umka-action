@@ -2,7 +2,6 @@ import { lt } from 'semver'
 import CliFileNameBuilder from './CliFileNameBuilder'
 
 export default class UrlProvider implements IUrlProvider {
-  private VERSION_0_1: string = '0.1'
   private ALPHA_VERSION_BORDER: string = '0.3.0'
 
   private builder: ICliFileNameBuilder
@@ -26,9 +25,8 @@ export default class UrlProvider implements IUrlProvider {
         throw e
       }
     }
-    const verSuffix: string = this.version === this.VERSION_0_1 ? '.' : ''
     const suffix: string = isAlpha ? '-alpha' : ''
     return 'https://github.com/vtereshkov/umka-lang/releases/download/v' +
-      `${verSuffix}${this.version}${suffix}/${this.builder.build()}.zip`
+      `${this.version}${suffix}/${this.builder.build()}.zip`
   }
 }
