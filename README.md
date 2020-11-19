@@ -14,8 +14,10 @@ This action sets up a [Umka](https://github.com/vtereshkov/umka-lang).
 
 Let's try to run `hello-world.um` file with the following content:
 
-```c
-printf("Hello World!")
+```rust
+fn main() {
+    printf("Hello World!")
+}
 ```
 
 ### Workflow configuration
