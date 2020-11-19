@@ -1,7 +1,7 @@
 ---
 name: 'Setup Umka'
 author: Yevhen Fabizhevskyi
-description: 'This action sets up a Umka.'
+description: 'This action sets up Umka scripting language interpreter.'
 branding:
   icon: terminal
   color: gray-dark
