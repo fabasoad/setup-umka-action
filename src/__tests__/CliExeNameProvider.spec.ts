@@ -12,10 +12,9 @@ interface IFixture {
 describe('CliExeNameProvider', () => {
   let osTypeStub: SinonStub<[], string>
 
-  const expectedVersion: string = 'ey1r6c00'
   const items: IFixture[] = [{
     os: 'Windows_NT',
-    execFileName: `${CLI_NAME}-${expectedVersion}.exe`
+    execFileName: `${CLI_NAME}.exe`
   }, {
     os: 'Darwin',
     execFileName: CLI_NAME
@@ -30,7 +29,7 @@ describe('CliExeNameProvider', () => {
 
   itParam('should return exe name successfully', items, (item: IFixture) => {
     osTypeStub.returns(item.os)
-    const provider: CliExeNameProvider = new CliExeNameProvider(expectedVersion)
+    const provider: CliExeNameProvider = new CliExeNameProvider()
     const actual: string = provider.getExeFileName()
     expect(actual).toBe(item.execFileName)
   })

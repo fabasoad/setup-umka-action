@@ -9,17 +9,18 @@ export default class CliFileNameBuilder implements ICliFileNameBuilder {
   }
 
   private getOS(): string {
-    switch (os.type()) {
-    case 'Darwin':
-      return 'mac'
+    const osType: string = os.type()
+    switch (osType) {
+    case 'Windows_NT':
+      return 'windows_mingw'
     case 'Linux':
       return 'linux'
     default:
-      return 'windows'
+      throw new Error(`${osType} is not supported`)
     }
   }
 
   build(): string {
-    return `${CLI_NAME}-${this.getOS()}-${this.version}`
+    return `${CLI_NAME}_${this.version}_x86-64_${this.getOS()}`
   }
 }

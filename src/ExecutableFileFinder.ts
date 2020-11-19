@@ -10,8 +10,7 @@ export default class ExecutableFileFinder implements IExecutableFileFinder {
   private provider: ICliExeNameProvider
 
   constructor(
-    version: string,
-    provider: ICliExeNameProvider = new CliExeNameProvider(version)) {
+    provider: ICliExeNameProvider = new CliExeNameProvider()) {
     this.provider = provider
     this.log = LoggerFactory.create('ExecutableFileFinder')
   }

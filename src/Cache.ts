@@ -17,7 +17,7 @@ export default class Cache implements ICache {
     version: string,
     ap: typeof addPath = addPath,
     cd: typeof cacheDir = cacheDir,
-    provider: ICliExeNameProvider = new CliExeNameProvider(version)) {
+    provider: ICliExeNameProvider = new CliExeNameProvider()) {
     this.version = version
     this.ap = ap
     this.cd = cd

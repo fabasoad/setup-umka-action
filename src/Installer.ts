@@ -16,7 +16,7 @@ export default class Installer implements IInstaller {
     urlProvider: IUrlProvider = new UrlProvider(version),
     downloader: IDownloader = new Downloader(),
     unzipper: IUnzipper = new Unzipper(),
-    fileFinder: IExecutableFileFinder = new ExecutableFileFinder(version),
+    fileFinder: IExecutableFileFinder = new ExecutableFileFinder(),
     cache: ICache = new Cache(version)) {
     this._urlProvider = urlProvider
     this._downloader = downloader

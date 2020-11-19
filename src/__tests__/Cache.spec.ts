@@ -12,7 +12,7 @@ describe('Cache', () => {
     fsChmodSyncStub = stub(fs, 'chmodSync')
   })
 
-  it('should cache successfully (${value.os})', async () => {
+  it('should cache successfully', async () => {
     const exeFileName: string = 'cmh2l9b7'
     const folderPath: string = '1ef84ehe'
     const execFilePath: string = path.join(folderPath, 'm8x9p1sw')
