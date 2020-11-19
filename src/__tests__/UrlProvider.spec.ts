@@ -4,78 +4,73 @@ import { restore, SinonStub, stub } from 'sinon'
 import UrlProvider from '../UrlProvider'
 
 interface IFixture {
-  eq: boolean
+  version: string
   lt: boolean
   suffix: string
   verSuffix: string
 }
 
 describe('UrlProvider', () => {
-  let semverEqStub: SinonStub<
-    [v1: string | SemVer, v2: string | SemVer, loose?: boolean], boolean>
   let semverLtStub: SinonStub<
     [v1: string | SemVer, v2: string | SemVer, loose?: boolean], boolean>
 
-  const expectedVersion: string = 'lp9ec2wv'
   const items: IFixture[] = [{
     suffix: '-alpha',
     lt: true,
-    verSuffix: '.',
-    eq: true
+    verSuffix: '',
+    version: 'lp9ec2wv'
   }, {
     suffix: '',
     lt: false,
-    verSuffix: '',
-    eq: false
+    verSuffix: '.',
+    version: '0.1'
   }]
 
   beforeEach(() => {
-    semverEqStub = stub(semver, 'eq')
     semverLtStub = stub(semver, 'lt')
   })
 
-  itParam('should return url successfully (${value.lt}, ${value.eq})',
+  itParam('should return url successfully (${value.lt})',
     items, (item: IFixture) => {
       semverLtStub.returns(item.lt)
-      semverEqStub.returns(item.eq)
       const fileName: string = '3iy81j7i'
-      const provider: UrlProvider = new UrlProvider(expectedVersion, {
+      const provider: UrlProvider = new UrlProvider(item.version, {
         build: (): string => fileName
       })
       const actual: string = provider.getUrl()
       expect(actual).toBe('https://github.com/vtereshkov/umka-lang/releases/' +
-        `download/v${item.verSuffix}${expectedVersion}${item.suffix}/` +
+        `download/v${item.verSuffix}${item.version}${item.suffix}/` +
         `${fileName}.zip`)
-      semverLtStub.calledOnceWithExactly(expectedVersion, '0.3.0')
+      semverLtStub.calledOnceWithExactly(item.version, '0.3.0')
     })
 
-  itParam('should throw error on invalid semver (${value.lt}, ${value.eq})',
+  itParam('should throw error on invalid semver (${value.lt})',
     items, (item: IFixture) => {
-      const msg: string = `Invalid Version: ${expectedVersion}`
+      const msg: string = `Invalid Version: ${item.version}`
       semverLtStub.onCall(0).throws(new Error(msg))
       semverLtStub.onCall(1).returns(item.lt)
-      semverEqStub.returns(item.eq)
       const fileName: string = '3iy81j7i'
-      const provider: UrlProvider = new UrlProvider(expectedVersion, {
+      const provider: UrlProvider = new UrlProvider(item.version, {
         build: (): string => fileName
       })
       const actual: string = provider.getUrl()
       expect(actual).toBe('https://github.com/vtereshkov/umka-lang/releases/' +
-        `download/v${item.verSuffix}${expectedVersion}${item.suffix}/` +
+        `download/v${item.verSuffix}${item.version}${item.suffix}/` +
         `${fileName}.zip`)
       expect(semverLtStub.calledTwice).toBe(true)
-      semverLtStub.calledWithExactly(expectedVersion, '0.3.0')
-      semverLtStub.calledWithExactly(`${expectedVersion}.0`, '0.3.0')
+      semverLtStub.calledWithExactly(item.version, '0.3.0')
+      semverLtStub.calledWithExactly(`${item.version}.0`, '0.3.0')
     })
 
   it('should throw error on non-semver', () => {
+    const version: string = 'rs3cj88e'
     const expectedError: Error = new Error('uj5p2t62')
     semverLtStub.throws(expectedError)
-    const provider: UrlProvider = new UrlProvider(expectedVersion, {
+    const provider: UrlProvider = new UrlProvider(version, {
       build: (): string => '3iy81j7i'
     })
     expect(() => provider.getUrl()).toThrow(expectedError)
-    semverLtStub.calledOnceWithExactly(expectedVersion, '0.3.0')
+    semverLtStub.calledOnceWithExactly(version, '0.3.0')
   })
 
   afterEach(() => restore())
