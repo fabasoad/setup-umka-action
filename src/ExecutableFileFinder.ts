@@ -10,8 +10,7 @@ export default class ExecutableFileFinder implements IExecutableFileFinder {
   private provider: ICliExeNameProvider
 
   constructor(
-    version: string,
-    provider: ICliExeNameProvider = new CliExeNameProvider(version)) {
+    provider: ICliExeNameProvider = new CliExeNameProvider()) {
     this.provider = provider
     this.log = LoggerFactory.create('ExecutableFileFinder')
   }
@@ -19,9 +18,7 @@ export default class ExecutableFileFinder implements IExecutableFileFinder {
   find(folderPath: string): string {
     const pattern: string =
       `${folderPath}${path.sep}**${path.sep}${CLI_NAME}*`
-    let files: string[] = glob.sync(pattern)
-    console.log(files)
-    files = files
+    const files: string[] = glob.sync(pattern)
       .filter((f: string) => f.endsWith(this.provider.getExeFileName()))
     if (files.length === 0) {
       throw new Error('Execution file has not been found under ' +
