@@ -51,7 +51,7 @@ jobs:
       - name: Build
         run: yarn run build
       - name: Install Umka
-        uses: fabasoad/setup-umka-action@v1.0.0
+        uses: fabasoad/setup-umka-action@v1.0.1
         with:
           version: ${{ matrix.version }}
       - name: Run script (Linux)
