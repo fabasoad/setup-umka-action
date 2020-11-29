@@ -36,7 +36,7 @@ describe('UrlProvider', () => {
       expect(actual).toBe('https://github.com/vtereshkov/umka-lang/releases/' +
         `download/v${expectedVersion}${item.suffix}/` +
         `${fileName}.zip`)
-      semverLtStub.calledOnceWithExactly(expectedVersion, '0.3.0')
+      expect(semverLtStub.withArgs(expectedVersion, '0.3.0').callCount).toBe(1)
     })
 
   itParam('should throw error on invalid semver (${value.lt})',
@@ -53,8 +53,9 @@ describe('UrlProvider', () => {
         `download/v${expectedVersion}${item.suffix}/` +
         `${fileName}.zip`)
       expect(semverLtStub.calledTwice).toBe(true)
-      semverLtStub.calledWithExactly(expectedVersion, '0.3.0')
-      semverLtStub.calledWithExactly(`${expectedVersion}.0`, '0.3.0')
+      expect(semverLtStub.withArgs(expectedVersion, '0.3.0').callCount).toBe(1)
+      expect(semverLtStub.withArgs(`${expectedVersion}.0`, '0.3.0').callCount)
+        .toBe(1)
     })
 
   it('should throw error on non-semver', () => {
@@ -65,7 +66,7 @@ describe('UrlProvider', () => {
       build: (): string => '3iy81j7i'
     })
     expect(() => provider.getUrl()).toThrow(expectedError)
-    semverLtStub.calledOnceWithExactly(version, '0.3.0')
+    expect(semverLtStub.withArgs(version, '0.3.0').callCount).toBe(1)
   })
 
   afterEach(() => restore())
