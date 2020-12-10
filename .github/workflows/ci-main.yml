@@ -27,11 +27,13 @@ jobs:
         run: yarn install
       - name: Lint
         run: yarn run lint
-      - name: Snyk authenticate
-        run: yarn run security:auth ${{ secrets.SNYK_API_TOKEN }}
+      - name: Security tests
+        run: |
+          yarn run security:auth ${{ secrets.SNYK_API_TOKEN }}
+          yarn run security:test
       - name: Unit tests
         run: yarn run test
-        if: startsWith(github.ref, 'refs/heads/bugfix/') || startsWith(github.ref, 'refs/heads/feature/')
+        if: github.event_name == 'push' && github.ref != 'refs/heads/main'
       - name: Unit tests with coverage
         uses: paambaati/codeclimate-action@v2.7.4
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'

@@ -26,8 +26,10 @@ jobs:
         run: yarn install
       - name: Lint
         run: yarn run lint
-      - name: Snyk authenticate
-        run: yarn run security:auth ${{ secrets.SNYK_API_TOKEN }}
+      - name: Security tests
+        run: |
+          yarn run security:auth ${{ secrets.SNYK_API_TOKEN }}
+          yarn run security:test
       - name: Unit tests
         run: yarn run test
   functional_tests:
