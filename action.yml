@@ -8,7 +8,8 @@ branding:
 inputs:
   version:
     description: 'Umka version.'
-    required: true
+    required: false
+    default: 0.3.3
 runs:
   using: 'node12'
   main: 'dist/index.js'

@@ -6,8 +6,11 @@
     "typescript.suggestionActions.enabled": true
   },
   "cSpell.words": [
+    "UNSECURE",
     "consts",
     "mingw",
+    "paambaati",
+    "umka",
     "unzipper",
     "vercel"
   ],

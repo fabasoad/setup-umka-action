@@ -6,9 +6,9 @@ This action sets up a [Umka](https://github.com/vtereshkov/umka-lang).
 
 ## Inputs
 
-| Name    | Required | Description                                                                             | Default | Possible values |
-|---------|----------|-----------------------------------------------------------------------------------------|---------|-----------------|
-| version | Yes      | Umka version that can be found [here](https://github.com/vtereshkov/umka-lang/releases) |         | &lt;String&gt;  |
+| Name    | Required | Description                                                                             | Default | Possible values         |
+|---------|----------|-----------------------------------------------------------------------------------------|---------|-------------------------|
+| version | No       | Umka version that can be found [here](https://github.com/vtereshkov/umka-lang/releases) | `0.3.3` | `0.1.1`, `0.2.3`, etc.  |
 
 ## Example usage
 
@@ -34,8 +34,6 @@ jobs:
     steps:
       - uses: actions/checkout@main
       - uses: fabasoad/setup-umka-action@main
-        with:
-          version: 0.3.3
       - name: Run script
         run: umka ./hello-world.um
 ```
