@@ -10,6 +10,7 @@
     "consts",
     "mingw",
     "paambaati",
+    "printf",
     "umka",
     "unzipper",
     "vercel"
