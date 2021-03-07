@@ -1,6 +1,5 @@
 import itParam from 'mocha-param'
 import { lt } from 'semver'
-import { restore } from 'sinon'
 import UrlProvider from '../UrlProvider'
 
 interface IFixture {
@@ -75,5 +74,5 @@ describe('UrlProvider', () => {
     expect(lt).toHaveBeenCalledWith(version, '0.3.0')
   })
 
-  afterEach(() => restore())
+  afterEach(() => (lt as jest.Mock).mockClear())
 })
