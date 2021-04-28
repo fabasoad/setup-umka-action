@@ -9,7 +9,7 @@ export interface IInstallerFactory {
 export const run = async (
   factory: IInstallerFactory = { get: (v: string) => new Installer(v) },
   gi: typeof getInput = getInput,
-  err: typeof error = error) => {
+  err: typeof error = error): Promise<void> => {
   const installer = factory.get(gi('version'));
   try {
     await installer.install();

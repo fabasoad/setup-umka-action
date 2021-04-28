@@ -37,7 +37,7 @@ describe('UrlProvider', () => {
       expect(actual).toBe('https://github.com/vtereshkov/umka-lang/releases/' +
         `download/v${expectedVersion}${item.suffix}/` +
         `${fileName}.zip`)
-      expect(lt.mock.calls.length).toBe(1)
+      expect((lt as jest.Mock).mock.calls.length).toBe(1)
       expect(lt).toHaveBeenCalledWith(expectedVersion, '0.3.0')
     })
 
@@ -55,7 +55,7 @@ describe('UrlProvider', () => {
       expect(actual).toBe('https://github.com/vtereshkov/umka-lang/releases/' +
         `download/v${expectedVersion}${item.suffix}/` +
         `${fileName}.zip`)
-      expect(lt.mock.calls.length).toBe(2)
+      expect((lt as jest.Mock).mock.calls.length).toBe(2)
       expect(lt).toHaveBeenCalledWith(expectedVersion, '0.3.0')
       expect(lt).toHaveBeenCalledWith(`${expectedVersion}.0`, '0.3.0')
     })
@@ -70,7 +70,7 @@ describe('UrlProvider', () => {
       build: (): string => '3iy81j7i'
     })
     expect(() => provider.getUrl()).toThrow(expectedError)
-    expect(lt.mock.calls.length).toBe(1)
+    expect((lt as jest.Mock).mock.calls.length).toBe(1)
     expect(lt).toHaveBeenCalledWith(version, '0.3.0')
   })
 
