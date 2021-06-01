@@ -30,7 +30,7 @@
   "homepage": "https://github.com/fabasoad/setup-umka-action#readme",
   "dependencies": {
     "@actions/core": "1.2.7",
-    "@actions/tool-cache": "1.6.1",
+    "@actions/tool-cache": "1.7.0",
     "glob": "7.1.6",
     "semver": "7.3.5",
     "winston": "3.3.3"
