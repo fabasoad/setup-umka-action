@@ -1,6 +1,6 @@
 {
   "name": "setup-umka-action",
-  "version": "1.0.11",
+  "version": "1.0.12",
   "description": "This GitHub action installs Umka",
   "main": "dist/index.js",
   "repository": {
