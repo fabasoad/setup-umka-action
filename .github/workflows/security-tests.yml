@@ -8,6 +8,7 @@ on:
       - 'bugfix/**'
       - 'dependabot/*'
       - 'feature/**'
+      - 'snyk-upgrade-**'
 
 jobs:
   snyk_tests:
