@@ -9,7 +9,7 @@ inputs:
   version:
     description: 'Umka version.'
     required: false
-    default: '0.5.2'
+    default: '0.5.3'
 runs:
   using: 'node12'
   main: 'dist/index.js'
