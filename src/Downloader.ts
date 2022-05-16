@@ -8,7 +8,7 @@ export default class Downloader implements IDownloader {
 
   async download(url: string): Promise<string> {
     this.log.info(`Downloading ${CLI_NAME} from ${url}`)
-    const filePath: string = await downloadTool(url, './umka.zip')
+    const filePath: string = await downloadTool(url)
     this.log.info(`Downloaded to ${filePath}`)
     return filePath
   }
