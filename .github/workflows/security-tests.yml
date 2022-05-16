@@ -5,10 +5,8 @@ on:
   push:
     branches:
       - 'main'
-      - 'bugfix/**'
-      - 'dependabot/**'
-      - 'feature/**'
-      - 'snyk-upgrade-**'
+      - 'fix-**'
+      - 'feature-**'
 
 jobs:
   snyk_tests:

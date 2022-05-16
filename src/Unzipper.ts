@@ -4,7 +4,7 @@ import { Logger } from 'winston'
 import LoggerFactory from './LoggerFactory'
 
 export default class Unzipper implements IUnzipper {
-  private ez: typeof extractZip
+  private readonly ez: typeof extractZip
   private log: Logger
 
   constructor(ez: typeof extractZip = extractZip) {

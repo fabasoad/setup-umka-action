@@ -7,7 +7,8 @@ import CliExeNameProvider from './CliExeNameProvider'
 import LoggerFactory from './LoggerFactory'
 
 export default class Cache implements ICache {
-  private version: string
+  private readonly version: string
+
   private provider: ICliExeNameProvider
   private log: Logger
 
