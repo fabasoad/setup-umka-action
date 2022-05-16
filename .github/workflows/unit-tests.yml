@@ -8,9 +8,6 @@ on:
       - 'fix-**'
       - 'feature-**'
 
-env:
-  ACTIONS_ALLOW_UNSECURE_COMMANDS: true
-
 jobs:
   unit_tests:
     name: Lint and Test

@@ -8,16 +8,14 @@ import LoggerFactory from './LoggerFactory'
 
 export default class Cache implements ICache {
   private readonly version: string
-
-  private provider: ICliExeNameProvider
-  private log: Logger
+  private readonly provider: ICliExeNameProvider
+  private readonly log: Logger = LoggerFactory.create(Cache.name)
 
   constructor(
     version: string,
     provider: ICliExeNameProvider = new CliExeNameProvider()) {
     this.version = version
     this.provider = provider
-    this.log = LoggerFactory.create('Cache')
   }
 
   async cache(execFilePath: string): Promise<void> {

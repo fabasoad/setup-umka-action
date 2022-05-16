@@ -4,12 +4,12 @@ import { CLI_NAME } from './consts'
 import LoggerFactory from './LoggerFactory'
 
 export default class Downloader implements IDownloader {
-  private log: Logger = LoggerFactory.create('Downloader')
+  private readonly log: Logger = LoggerFactory.create(Downloader.name)
 
   async download(url: string): Promise<string> {
     this.log.info(`Downloading ${CLI_NAME} from ${url}`)
-    const zipPath: string = await downloadTool(url)
-    this.log.info(`Downloaded to ${zipPath}`)
-    return zipPath
+    const filePath: string = await downloadTool(url)
+    this.log.info(`Downloaded to ${filePath}`)
+    return filePath
   }
 }

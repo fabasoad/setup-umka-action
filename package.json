@@ -13,10 +13,8 @@
     "lint:es": "eslint --ext ts src",
     "lint": "yarn run lint:md && yarn run lint:es",
     "postinstall": "yarn husky install",
-    "prepare": "yarn run snyk-protect",
     "security:auth": "snyk auth",
     "security:test": "snyk test",
-    "snyk-protect": "snyk protect",
     "test": "jest --config=jest.config.json --coverage"
   },
   "keywords": [
