@@ -17,8 +17,10 @@ jobs:
     timeout-minutes: 5
     strategy:
       matrix:
-        os: ['ubuntu-latest', 'windows-latest']
-        version: ['0.1.2', '0.2', '0.2.1', '0.2.2', '0.2.3', '0.3', '0.3.1', '0.3.2', '0.3.3', '0.3.4', '0.4', '0.4.1', '0.5', '0.5.1', '0.5.2', '0.5.3', '0.6', '0.7']
+#        os: ['ubuntu-latest', 'windows-latest']
+        os: ['windows-latest']
+#        version: ['0.1.2', '0.2', '0.2.1', '0.2.2', '0.2.3', '0.3', '0.3.1', '0.3.2', '0.3.3', '0.3.4', '0.4', '0.4.1', '0.5', '0.5.1', '0.5.2', '0.5.3', '0.6', '0.7']
+        version: ['0.6', '0.7']
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v3
