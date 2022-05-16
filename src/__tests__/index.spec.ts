@@ -1,4 +1,4 @@
-import { error, getInput, InputOptions } from '@actions/core'
+import { setFailed, getInput, InputOptions } from '@actions/core'
 import { assert } from 'chai'
 import { run } from '../index'
 
@@ -32,7 +32,7 @@ describe('Main runner', () => {
         assert.equal(version, TEST_VERSION)
         return installerMock
       }
-    }, getInputMocked as typeof getInput, errorMocked as typeof error)
+    }, getInputMocked as typeof getInput, errorMocked as typeof setFailed)
     expect(installerMock.calls).toBe(1)
   })
 
@@ -47,7 +47,7 @@ describe('Main runner', () => {
           }
         }
       }
-    }, getInputMocked as typeof getInput, errorMocked as typeof error)
+    }, getInputMocked as typeof getInput, errorMocked as typeof setFailed)
     expect(errorMocked.mock.calls.length).toBe(1)
     expect(errorMocked.mock.calls[0][0]).toBe(expectedMessage)
   })

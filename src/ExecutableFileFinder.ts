@@ -17,7 +17,9 @@ export default class ExecutableFileFinder implements IExecutableFileFinder {
   find(folderPath: string): string {
     const pattern: string =
       `${folderPath}${path.sep}**${path.sep}${CLI_NAME}*`
-    const files: string[] = glob.sync(pattern)
+    let files: string[] = glob.sync(pattern)
+    this.log.info(`Files found by glob: ${files.join(', ')}`)
+    files = files
       .filter((f: string) => f.endsWith(this.provider.getExeFileName()))
     if (files.length === 0) {
       throw new Error('Execution file has not been found under ' +
