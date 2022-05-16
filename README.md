@@ -8,7 +8,7 @@ This action sets up a [Umka](https://github.com/vtereshkov/umka-lang).
 
 | Name    | Required | Description                                                                             | Default | Possible values        |
 |---------|----------|-----------------------------------------------------------------------------------------|---------|------------------------|
-| version | No       | Umka version that can be found [here](https://github.com/vtereshkov/umka-lang/releases) | `0.6`   | `0.4.1`, `0.5.3`, etc. |
+| version | No       | Umka version that can be found [here](https://github.com/vtereshkov/umka-lang/releases) | `0.7`   | `0.4.1`, `0.5.3`, etc. |
 
 ## Example usage
 
