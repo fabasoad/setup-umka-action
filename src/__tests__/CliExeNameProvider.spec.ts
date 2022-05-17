@@ -1,6 +1,5 @@
 import itParam from 'mocha-param'
 import os from 'os'
-import { restore, SinonStub, stub } from 'sinon'
 import CliExeNameProvider from '../CliExeNameProvider'
 import { CLI_NAME } from '../consts'
 
@@ -9,9 +8,9 @@ interface IFixture {
   execFileName: string
 }
 
-describe('CliExeNameProvider', () => {
-  let osTypeStub: SinonStub<[], string>
+jest.mock('os')
 
+describe('CliExeNameProvider::getExeFileName', () => {
   const items: IFixture[] = [{
     os: 'Windows_NT',
     execFileName: `${CLI_NAME}.exe`
@@ -24,15 +23,13 @@ describe('CliExeNameProvider', () => {
   }]
 
   beforeEach(() => {
-    osTypeStub = stub(os, 'type')
+    (os.type as jest.Mock).mockClear()
   })
 
   itParam('should return exe name successfully', items, (item: IFixture) => {
-    osTypeStub.returns(item.os)
+    (os.type as jest.Mock).mockImplementation(() => item.os)
     const provider: CliExeNameProvider = new CliExeNameProvider()
     const actual: string = provider.getExeFileName()
     expect(actual).toBe(item.execFileName)
   })
-
-  afterEach(() => restore())
 })

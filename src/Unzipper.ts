@@ -4,12 +4,11 @@ import { Logger } from 'winston'
 import LoggerFactory from './LoggerFactory'
 
 export default class Unzipper implements IUnzipper {
-  private ez: typeof extractZip
-  private log: Logger
+  private readonly ez: typeof extractZip
+  private readonly log: Logger = LoggerFactory.create(Unzipper.name)
 
   constructor(ez: typeof extractZip = extractZip) {
     this.ez = ez
-    this.log = LoggerFactory.create('Unzipper')
   }
 
   async unzip(zipPath: string): Promise<string> {

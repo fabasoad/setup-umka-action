@@ -27,9 +27,9 @@ export default class Installer implements IInstaller {
 
   public async install(): Promise<void> {
     const url: string = this._urlProvider.getUrl()
-    const zipPath: string = await this._downloader.download(url)
-    const folderPath: string = await this._unzipper.unzip(zipPath)
+    const filePath: string = await this._downloader.download(url)
+    const folderPath: string = await this._unzipper.unzip(filePath)
     const execFilePath: string = this._fileFinder.find(folderPath)
-    this._cache.cache(execFilePath)
+    return this._cache.cache(execFilePath)
   }
 }
