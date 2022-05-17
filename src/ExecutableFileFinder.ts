@@ -1,4 +1,3 @@
-import glob from 'glob'
 import path from 'path'
 import { readdirSync, statSync } from 'fs'
 import { Logger } from 'winston'
