@@ -36,7 +36,7 @@ describe('ExecutableFileFinder::find', () => {
   })
 
   itParam(
-    'should not find successfully',
+    'should not find successfully (${value})',
     ['folder3', null],
     (dirPath: string) => {
       expect(() => finder.find(dirPath)).toThrow(
