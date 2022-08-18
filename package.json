@@ -27,7 +27,7 @@
   "license": "MIT",
   "homepage": "https://github.com/fabasoad/setup-umka-action#readme",
   "dependencies": {
-    "@actions/core": "1.8.2",
+    "@actions/core": "1.9.1",
     "@actions/tool-cache": "2.0.1",
     "semver": "7.3.7",
     "winston": "3.7.2"
