@@ -6,9 +6,9 @@ This action sets up a [Umka](https://github.com/vtereshkov/umka-lang).
 
 ## Inputs
 
-| Name    | Required | Description                                                                             | Default | Possible values        |
-|---------|----------|-----------------------------------------------------------------------------------------|---------|------------------------|
-| version | No       | Umka version that can be found [here](https://github.com/vtereshkov/umka-lang/releases) | `0.8`   | `0.4.1`, `0.5.3`, etc. |
+| Name    | Required | Description                                                                             | Default | Possible values     |
+|---------|----------|-----------------------------------------------------------------------------------------|---------|---------------------|
+| version | No       | Umka version that can be found [here](https://github.com/vtereshkov/umka-lang/releases) | `0.9`   | `0.5.3`, `0.8` etc. |
 
 ## Example usage
 
