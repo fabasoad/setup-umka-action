@@ -11,5 +11,30 @@ inputs:
     required: false
     default: '0.9'
 runs:
-  using: 'node16'
-  main: 'dist/index.js'
+  using: 'composite'
+  steps:
+    - name: Fail
+      uses: actions/github-script@v6
+      if: ${{ runner.os == 'macOS' }}
+      with:
+        script: core.setFailed('${{ runner.os }} ${{ runner.arch }} is not supported');
+    - name: Collect info
+      if: ${{ runner.os != 'macOS' }}
+      id: info
+      run: |
+        if [[ "${{ runner.os }}" == "Linux" ]]; then
+          UMKA_BINARY=linux
+        else
+          UMKA_BINARY=windows_mingw
+        fi
+        echo "UMKA_BINARY=$UMKA_BINARY" >> $GITHUB_OUTPUT
+      shell: bash
+    - name: Install
+      if: ${{ runner.os != 'macOS' }}
+      run: |
+        wget -qO- https://github.com/vtereshkov/umka-lang/releases/download/v${{ inputs.version }}/umka_${{ inputs.version }}_x86-64_${{ steps.info.outputs.UMKA_BINARY }}.zip | tar xvf -
+        if [[ "${{ runner.os }}" == "Linux" ]]; then
+          chmod +x "${{ github.action_path }}/umka_${{ inputs.version }}_x86-64_${{ steps.info.outputs.UMKA_BINARY }}/umka"
+        fi
+        echo "${{ github.action_path }}/umka_${{ inputs.version }}_x86-64_${{ steps.info.outputs.UMKA_BINARY }}" >> $GITHUB_PATH
+      shell: bash

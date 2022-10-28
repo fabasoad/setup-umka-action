@@ -7,6 +7,7 @@ on:
       - 'main'
       - 'fix-**'
       - 'feature-**'
+      - 'pre-commit-ci-update-config'
 
 jobs:
   functional_tests:
@@ -15,23 +16,22 @@ jobs:
     strategy:
       matrix:
         os: ['ubuntu-latest', 'windows-latest']
-        version: ['0.2.1', '0.2.2', '0.2.3', '0.3', '0.3.1', '0.3.2', '0.3.3', '0.3.4', '0.4', '0.4.1', '0.5', '0.5.1', '0.5.2', '0.5.3', '0.6', '0.7', '0.8', '0.9']
+#        version: ['0.2.1', '0.2.2', '0.2.3', '0.3', '0.3.1', '0.3.2', '0.3.3', '0.3.4', '0.4', '0.4.1', '0.5', '0.5.1', '0.5.2', '0.5.3', '0.6', '0.7', '0.8', '0.9']
+        version: ['0.9']
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v3
         with:
           ref: ${{ github.ref }}
-      - name: Compile
-        run: yarn install --ignore-scripts
-      - name: Build
-        run: yarn run build
-      - name: Install Umka
+      - name: Setup Umka
         uses: ./
         with:
           version: ${{ matrix.version }}
       - name: Run script (Linux)
-        if: matrix.os == 'ubuntu-latest'
+        if: ${{ matrix.os == 'ubuntu-latest' }}
         run: umka ./hello-world.um
+        shell: bash
       - name: Run script (Windows)
-        if: matrix.os == 'windows-latest'
+        if: ${{ matrix.os == 'windows-latest' }}
         run: umka.exe ./hello-world.um
+        shell: bash
