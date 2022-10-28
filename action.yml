@@ -32,7 +32,7 @@ runs:
     - name: Install
       if: ${{ runner.os != 'macOS' }}
       run: |
-        wget -qO- https://github.com/vtereshkov/umka-lang/releases/download/v${{ inputs.version }}/umka_${{ inputs.version }}_x86-64_${{ steps.info.outputs.UMKA_BINARY }}.zip | unzip -p -
+        wget -q -O umka.zip https://github.com/vtereshkov/umka-lang/releases/download/v${{ inputs.version }}/umka_${{ inputs.version }}_x86-64_${{ steps.info.outputs.UMKA_BINARY }}.zip && unzip umka.zip && rm -f umka.zip
         if [[ "${{ runner.os }}" == "Linux" ]]; then
           chmod +x "${{ github.action_path }}umka_${{ inputs.version }}_x86-64_${{ steps.info.outputs.UMKA_BINARY }}/umka"
         fi
