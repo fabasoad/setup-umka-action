@@ -28,6 +28,10 @@ jobs:
         uses: ./
         with:
           version: ${{ matrix.version }}
+      - name: Setup Umka (2)
+        uses: ./
+        with:
+          version: ${{ matrix.version }}
       - name: Run script (Linux)
         if: ${{ matrix.os == 'ubuntu-latest' }}
         run: umka ./hello-world.um
