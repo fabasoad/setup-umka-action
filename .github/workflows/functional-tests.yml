@@ -54,6 +54,6 @@ jobs:
           version: ${{ matrix.version }}
       - name: Run script
         run: |
-          echo $PATH
-          umka ./hello-world.um
+          ls -A /__w/setup-umka-action/setup-umka-action/umka/umka_0.9_x86-64_linux
+#          umka ./hello-world.um
         shell: sh
