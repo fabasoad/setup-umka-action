@@ -9,7 +9,7 @@ This action sets up a [Umka](https://github.com/vtereshkov/umka-lang).
 ## Prerequisites
 
 The following tools have to be installed for successful work of this GitHub action:
-`unzip`, `curl`.
+`unzip`, `wget`.
 
 > `Windows` and `Linux` are the only supported OS at this moment
 
