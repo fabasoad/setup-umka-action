@@ -53,5 +53,7 @@ jobs:
         with:
           version: ${{ matrix.version }}
       - name: Run script
-        run: umka ./hello-world.um
+        run: |
+          echo $PATH
+          umka ./hello-world.um
         shell: sh
