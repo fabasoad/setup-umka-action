@@ -46,6 +46,8 @@ runs:
           chmod +x "${{ steps.info.outputs.UMKA_PATH }}/umka_${{ inputs.version }}_x86-64_${{ steps.info.outputs.UMKA_BINARY }}/umka"
         fi
         echo "${{ steps.info.outputs.UMKA_PATH }}/umka_${{ inputs.version }}_x86-64_${{ steps.info.outputs.UMKA_BINARY }}" >> $GITHUB_PATH
+        cd ${{ steps.info.outputs.UMKA_PATH }}/umka_${{ inputs.version }}_x86-64_${{ steps.info.outputs.UMKA_BINARY }}
+        ./umka --version
       shell: sh
       working-directory: ${{ steps.info.outputs.UMKA_PATH }}
     - name: Install umka (Windows)
