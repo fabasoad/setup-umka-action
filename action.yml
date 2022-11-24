@@ -39,9 +39,7 @@ runs:
       env:
         DOWNLOAD_URL: https://github.com/vtereshkov/umka-lang/releases/download/v${{ inputs.version }}/umka_${{ inputs.version }}_x86-64_${{ steps.info.outputs.UMKA_BINARY }}.zip
       run: |
-        wget $DOWNLOAD_URL -O umka.zip
-        unzip umka.zip -d "${{ steps.info.outputs.UMKA_PATH }}"
-        rm -f umka.zip
+        wget $DOWNLOAD_URL -O umka.zip && unzip umka.zip -d "${{ steps.info.outputs.UMKA_PATH }}" && rm -f umka.zip
         if [ "${{ runner.os }}" = "Linux" ]; then
           chmod +x "${{ steps.info.outputs.UMKA_PATH }}/umka_${{ inputs.version }}_x86-64_${{ steps.info.outputs.UMKA_BINARY }}/umka"
         fi
