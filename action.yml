@@ -22,7 +22,7 @@ runs:
       if: ${{ runner.os != 'macOS' }}
       id: info
       run: |
-        if [[ "${{ runner.os }}" == "Linux" ]]; then
+        if [ "${{ runner.os }}" = "Linux" ]; then
           UMKA_BINARY=linux
           UMKA_EXEC=umka
         else
@@ -31,18 +31,21 @@ runs:
         fi
         echo "UMKA_BINARY=$UMKA_BINARY" >> $GITHUB_OUTPUT
         echo "UMKA_INSTALLED=$(if command -v $UMKA_EXEC >/dev/null 2>&1; then echo true; else echo false; fi)" >> $GITHUB_OUTPUT
-      shell: bash
+        mkdir -p "$GITHUB_WORKSPACE/umka"
+        echo "UMKA_PATH=$GITHUB_WORKSPACE/umka" >> $GITHUB_OUTPUT
+      shell: sh
     - name: Install umka (Linux)
       if: ${{ runner.os == 'Linux' && steps.info.outputs.UMKA_INSTALLED == 'false' }}
       env:
         DOWNLOAD_URL: https://github.com/vtereshkov/umka-lang/releases/download/v${{ inputs.version }}/umka_${{ inputs.version }}_x86-64_${{ steps.info.outputs.UMKA_BINARY }}.zip
       run: |
         wget -q -O umka.zip $DOWNLOAD_URL && unzip umka.zip && rm -f umka.zip
-        if [[ "${{ runner.os }}" == "Linux" ]]; then
-          chmod +x "${{ github.action_path }}umka_${{ inputs.version }}_x86-64_${{ steps.info.outputs.UMKA_BINARY }}/umka"
+        if [ "${{ runner.os }}" = "Linux" ]; then
+          chmod +x "${{ steps.info.outputs.UMKA_PATH }}/umka_${{ inputs.version }}_x86-64_${{ steps.info.outputs.UMKA_BINARY }}/umka"
         fi
-        echo "${{ github.action_path }}umka_${{ inputs.version }}_x86-64_${{ steps.info.outputs.UMKA_BINARY }}" >> $GITHUB_PATH
-      shell: bash
+        echo "${{ steps.info.outputs.UMKA_PATH }}/umka_${{ inputs.version }}_x86-64_${{ steps.info.outputs.UMKA_BINARY }}" >> $GITHUB_PATH
+      shell: sh
+      working-directory: ${{ steps.info.outputs.UMKA_PATH }}
     - name: Install umka (Windows)
       if: ${{ runner.os == 'Windows' && steps.info.outputs.UMKA_INSTALLED == 'false' }}
       env:
