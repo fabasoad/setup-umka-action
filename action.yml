@@ -39,13 +39,11 @@ runs:
       env:
         DOWNLOAD_URL: https://github.com/vtereshkov/umka-lang/releases/download/v${{ inputs.version }}/umka_${{ inputs.version }}_x86-64_${{ steps.info.outputs.UMKA_BINARY }}.zip
       run: |
-        wget $DOWNLOAD_URL -O umka.zip && unzip umka.zip -d "${{ steps.info.outputs.UMKA_PATH }}" && rm -f umka.zip
+        wget -q -O umka.zip $DOWNLOAD_URL && unzip umka.zip && rm -f umka.zip
         if [ "${{ runner.os }}" = "Linux" ]; then
           chmod +x "${{ steps.info.outputs.UMKA_PATH }}/umka_${{ inputs.version }}_x86-64_${{ steps.info.outputs.UMKA_BINARY }}/umka"
         fi
         echo "${{ steps.info.outputs.UMKA_PATH }}/umka_${{ inputs.version }}_x86-64_${{ steps.info.outputs.UMKA_BINARY }}" >> $GITHUB_PATH
-        cd ${{ steps.info.outputs.UMKA_PATH }}/umka_${{ inputs.version }}_x86-64_${{ steps.info.outputs.UMKA_BINARY }}
-        ./umka --version
       shell: sh
       working-directory: ${{ steps.info.outputs.UMKA_PATH }}
     - name: Install umka (Windows)

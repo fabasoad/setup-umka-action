@@ -8,29 +8,30 @@ on:
   pull_request:
 
 jobs:
-#  run-script:
-#    name: Run script
-#    timeout-minutes: 5
-#    strategy:
-#      fail-fast: false
-#      matrix:
-#        os: ['ubuntu-latest', 'windows-latest']
+  run-script:
+    name: Run script
+    timeout-minutes: 5
+    strategy:
+      fail-fast: false
+      matrix:
+        os: ['ubuntu-latest', 'windows-latest']
 #        version: ['0.5.3', '0.6', '0.7', '0.8', '0.9']
-#    runs-on: ${{ matrix.os }}
-#    steps:
-#      - uses: actions/checkout@v3
-#      - name: Setup Umka
-#        uses: ./
-#        with:
-#          version: ${{ matrix.version }}
-#      - name: Run script (Linux)
-#        if: ${{ runner.os == 'Linux' }}
-#        run: umka ./hello-world.um
-#        shell: sh
-#      - name: Run script (Windows)
-#        if: ${{ runner.os == 'Windows' }}
-#        run: umka.exe ./hello-world.um
-#        shell: sh
+        version: ['0.9']
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Umka
+        uses: ./
+        with:
+          version: ${{ matrix.version }}
+      - name: Run script (Linux)
+        if: ${{ runner.os == 'Linux' }}
+        run: umka ./hello-world.um
+        shell: sh
+      - name: Run script (Windows)
+        if: ${{ runner.os == 'Windows' }}
+        run: umka.exe ./hello-world.um
+        shell: sh
   run-script-alpine:
     name: Run script (alpine-latest)
     timeout-minutes: 5
