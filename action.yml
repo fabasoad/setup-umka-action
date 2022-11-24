@@ -42,7 +42,7 @@ runs:
         echo "pwd: $PWD"
         echo "Before curl:"
         ls -A
-        curl -o umka.zip $DOWNLOAD_URL
+        wget $DOWNLOAD_URL -O umka.zip
         echo "Before unzip:"
         ls -A
         unzip umka.zip -d "${{ steps.info.outputs.UMKA_PATH }}"
