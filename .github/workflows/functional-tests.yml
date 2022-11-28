@@ -24,10 +24,5 @@ jobs:
         with:
           version: ${{ matrix.version }}
       - name: Run script (Linux)
-        if: ${{ runner.os == 'Linux' }}
         run: umka ./hello-world.um
-        shell: sh
-      - name: Run script (Windows)
-        if: ${{ runner.os == 'Windows' }}
-        run: umka.exe ./hello-world.um
         shell: sh
