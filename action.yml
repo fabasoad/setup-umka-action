@@ -43,13 +43,13 @@ runs:
         tag: v${{ inputs.version }}
         fileName: umka_${{ inputs.version }}_x86-64_${{ steps.info.outputs.UMKA_BINARY }}.zip
         tarBall: false
-        zipBall: true
+        zipBall: false
         out-file-path: umka
     - name: Install umka
       if: ${{ steps.info.outputs.UMKA_INSTALLED == 'false' }}
       run: |
-        unzip umka.zip
-        rm -f umka.zip
+        unzip umka_${{ inputs.version }}_x86-64_${{ steps.info.outputs.UMKA_BINARY }}.zip
+        rm -f umka_${{ inputs.version }}_x86-64_${{ steps.info.outputs.UMKA_BINARY }}.zip
         if [ "${{ runner.os }}" != "Windows" ]; then
           chmod +x "${{ steps.info.outputs.UMKA_PATH }}/umka_${{ inputs.version }}_x86-64_${{ steps.info.outputs.UMKA_BINARY }}/umka"
         fi
