@@ -45,7 +45,6 @@ runs:
         tarBall: false
         zipBall: true
         out-file-path: umka
-        token: ${{ secrets.GITHUB_TOKEN }}
     - name: Install umka
       if: ${{ steps.info.outputs.UMKA_INSTALLED == 'false' }}
       run: |
