@@ -34,25 +34,26 @@ runs:
         mkdir -p "$GITHUB_WORKSPACE/umka"
         echo "UMKA_PATH=$GITHUB_WORKSPACE/umka" >> $GITHUB_OUTPUT
       shell: sh
-    - name: Install umka (Linux)
-      if: ${{ runner.os == 'Linux' && steps.info.outputs.UMKA_INSTALLED == 'false' }}
-      env:
-        DOWNLOAD_URL: https://github.com/vtereshkov/umka-lang/releases/download/v${{ inputs.version }}/umka_${{ inputs.version }}_x86-64_${{ steps.info.outputs.UMKA_BINARY }}.zip
+    - name: Download umka
+      if: ${{ steps.info.outputs.UMKA_INSTALLED == 'false' }}
+      uses: robinraju/release-downloader@v1.6
+      with:
+        repository: vtereshkov/umka-lang
+        latest: false
+        tag: v${{ inputs.version }}
+        fileName: umka_${{ inputs.version }}_x86-64_${{ steps.info.outputs.UMKA_BINARY }}.zip
+        tarBall: false
+        zipBall: true
+        out-file-path: umka
+        token: ${{ secrets.GITHUB_TOKEN }}
+    - name: Install umka
+      if: ${{ steps.info.outputs.UMKA_INSTALLED == 'false' }}
       run: |
-        wget -q -O umka.zip $DOWNLOAD_URL && unzip umka.zip && rm -f umka.zip
-        if [ "${{ runner.os }}" = "Linux" ]; then
+        unzip umka.zip
+        rm -f umka.zip
+        if [ "${{ runner.os }}" != "Windows" ]; then
           chmod +x "${{ steps.info.outputs.UMKA_PATH }}/umka_${{ inputs.version }}_x86-64_${{ steps.info.outputs.UMKA_BINARY }}/umka"
         fi
         echo "${{ steps.info.outputs.UMKA_PATH }}/umka_${{ inputs.version }}_x86-64_${{ steps.info.outputs.UMKA_BINARY }}" >> $GITHUB_PATH
       shell: sh
       working-directory: ${{ steps.info.outputs.UMKA_PATH }}
-    - name: Install umka (Windows)
-      if: ${{ runner.os == 'Windows' && steps.info.outputs.UMKA_INSTALLED == 'false' }}
-      env:
-        DOWNLOAD_URL: https://github.com/vtereshkov/umka-lang/releases/download/v${{ inputs.version }}/umka_${{ inputs.version }}_x86-64_${{ steps.info.outputs.UMKA_BINARY }}.zip
-      run: |
-        Invoke-WebRequest -URI $Env:DOWNLOAD_URL -OutFile umka.zip
-        Expand-Archive umka.zip -DestinationPath .
-        Remove-Item -Path umka.zip
-        echo "${{ github.action_path }}umka_${{ inputs.version }}_x86-64_${{ steps.info.outputs.UMKA_BINARY }}" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
-      shell: pwsh
