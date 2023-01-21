@@ -15,9 +15,9 @@ The following tools have to be installed for successful work of this GitHub acti
 
 ## Inputs
 
-| Name    | Required | Description                                                                             | Default | Possible values     |
-|---------|----------|-----------------------------------------------------------------------------------------|---------|---------------------|
-| version | No       | Umka version that can be found [here](https://github.com/vtereshkov/umka-lang/releases) | `0.9`   | `0.5.3`, `0.8` etc. |
+| Name    | Required | Description                                                                             | Default | Possible values   |
+|---------|----------|-----------------------------------------------------------------------------------------|---------|-------------------|
+| version | No       | Umka version that can be found [here](https://github.com/vtereshkov/umka-lang/releases) | `0.10`  | `0.8`, `0.9` etc. |
 
 ## Example usage
 
