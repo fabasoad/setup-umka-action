@@ -1,17 +1,17 @@
 ---
-name: 'Setup Umka'
+name: "Setup Umka"
 author: Yevhen Fabizhevskyi
-description: 'This action sets up Umka scripting language interpreter.'
+description: "This action sets up Umka scripting language interpreter."
 branding:
   icon: terminal
   color: gray-dark
 inputs:
   version:
-    description: 'Umka version.'
+    description: "Umka version."
     required: false
-    default: '0.10'
+    default: "1.0"
 runs:
-  using: 'composite'
+  using: "composite"
   steps:
     - name: Fail
       uses: actions/github-script@v6
