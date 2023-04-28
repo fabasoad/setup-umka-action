@@ -1,10 +1,9 @@
 ---
 name: Bug report
 about: Create a report to help us improve
-title: ''
+title: ""
 labels: bug
 assignees: fabasoad
-
 ---
 
 #### Describe the bug
@@ -32,6 +31,7 @@ If applicable, add screenshots to help explain your problem.
 
 - OS: [e.g. Windows 10 Enterprise v.1909 (OS Build 18363.720)]
 - `setup-umka-action` version [e.g. 1.0.0]
+- `umka` version [e.g. 1.0]
 
 #### Additional context
 
