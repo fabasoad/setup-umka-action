@@ -50,5 +50,3 @@ repos:
       - id: no-commit-to-branch
         stages: ["commit"]
       - id: trailing-whitespace
-ci:
-  autofix_prs: false

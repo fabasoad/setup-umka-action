@@ -3,7 +3,7 @@
 [![Stand With Ukraine](https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/badges/StandWithUkraine.svg)](https://stand-with-ukraine.pp.ua)
 ![GitHub release](https://img.shields.io/github/v/release/fabasoad/setup-umka-action?include_prereleases)
 ![Functional Tests](https://github.com/fabasoad/setup-umka-action/workflows/Functional%20Tests/badge.svg)
-[![pre-commit.ci status](https://results.pre-commit.ci/badge/github/fabasoad/setup-umka-action/main.svg)](https://results.pre-commit.ci/latest/github/fabasoad/setup-umka-action/main)
+![pre-commit](https://github.com/fabasoad/setup-umka-action/actions/workflows/pre-commit.yml/badge.svg)
 
 This action sets up a [Umka](https://github.com/vtereshkov/umka-lang).
 
