@@ -9,7 +9,7 @@ inputs:
   version:
     description: "Umka version."
     required: false
-    default: "1.0"
+    default: "1.1"
 runs:
   using: "composite"
   steps:
