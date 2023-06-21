@@ -19,7 +19,7 @@ The following tools have to be installed for successful work of this GitHub acti
 <!-- prettier-ignore-start -->
 | Name    | Required | Description                                                                             | Default | Possible values     |
 |---------|----------|-----------------------------------------------------------------------------------------|---------|---------------------|
-| version | No       | Umka version that can be found [here](https://github.com/vtereshkov/umka-lang/releases) | `1.0`   | `0.10`, `0.9`, etc. |
+| version | No       | Umka version that can be found [here](https://github.com/vtereshkov/umka-lang/releases) | `1.1`   | `0.10`, `1.0`, etc. |
 <!-- prettier-ignore-end -->
 
 ## Example usage
