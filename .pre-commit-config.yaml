@@ -15,7 +15,7 @@ repos:
       - id: gitleaks
   # Markdown
   - repo: https://github.com/igorshubovych/markdownlint-cli
-    rev: v0.36.0
+    rev: v0.37.0
     hooks:
       - id: markdownlint-fix
         stages: ["commit"]
@@ -27,7 +27,7 @@ repos:
         stages: ["push"]
   # GitHub Actions
   - repo: https://github.com/rhysd/actionlint
-    rev: v1.6.25
+    rev: v1.6.26
     hooks:
       - id: actionlint
         stages: ["push"]
