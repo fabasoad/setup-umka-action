@@ -9,7 +9,7 @@ inputs:
   version:
     description: "Umka version."
     required: false
-    default: "1.3"
+    default: "1.3.1"
 runs:
   using: "composite"
   steps:
@@ -34,7 +34,7 @@ runs:
         mkdir -p "${GITHUB_WORKSPACE}/umka"
         echo "umka-path=${GITHUB_WORKSPACE}/umka" >> "$GITHUB_OUTPUT"
         file_name="umka_${INPUT_VERSION}"
-        if [ "${INPUT_VERSION}" != "1.3" ]; then
+        if [ "${INPUT_VERSION}" != "1.3" ] && [ "${INPUT_VERSION}" != "1.3.1" ]; then
           file_name="${file_name}_x86-64"
         fi
         file_name="${file_name}_${bin_name}"
@@ -42,7 +42,7 @@ runs:
       shell: sh
     - name: Download umka
       if: ${{ steps.info.outputs.umka-installed == 'false' }}
-      uses: robinraju/release-downloader@v1.8
+      uses: robinraju/release-downloader@v1.9
       with:
         repository: vtereshkov/umka-lang
         latest: false
@@ -53,8 +53,6 @@ runs:
         out-file-path: umka
     - name: Install umka
       if: ${{ steps.info.outputs.umka-installed == 'false' }}
-      env:
-        INPUT_VERSION: "${{ inputs.version }}"
       run: |
         unzip "${{ steps.info.outputs.file-name }}.zip"
         rm -f "${{ steps.info.outputs.file-name }}.zip"
