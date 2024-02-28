@@ -20,8 +20,9 @@ runs:
     - name: Collect info
       if: ${{ runner.os != 'macOS' }}
       id: info
+      env:
+        INPUT_VERSION: "${{ inputs.version }}"
       run: |
-        echo ">>>>> ${INPUT_VERSION}"
         if [ "${RUNNER_OS}" = "Linux" ]; then
           bin_name=linux
           exec_name=umka
