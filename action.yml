@@ -46,8 +46,9 @@ runs:
       run: |
         echo "${{ steps.release.outputs.tag_name }}"
         echo "====="
-        ./install-umka.sh \
-          "${{ steps.release.outputs.tag_name }}" \
-          "${{ github.run_id }}"
+        ./install-umka-2.sh "${{ fromJson(steps.release.outputs.downloaded_files)[0] }}"
+      #        ./install-umka.sh \
+      #          "${{ steps.release.outputs.tag_name }}" \
+      #          "${{ github.run_id }}"
       shell: sh
       working-directory: "${{ github.action_path }}/src"
