@@ -10,6 +10,10 @@ inputs:
     description: "Umka version."
     required: false
     default: "latest"
+  token:
+    description: "The GitHub token or personal access token"
+    required: false
+    default: "${{ github.token }}"
 runs:
   using: "composite"
   steps:
@@ -33,13 +37,17 @@ runs:
         repository: vtereshkov/umka-lang
         latest: ${{ inputs.version == 'latest' }}
         tag: ${{ inputs.version == 'latest' && '' || format('v{0}', inputs.version) }}
-        fileName: ${{ steps.info.outputs.file-name }}.zip
-        tarBall: false
-        zipBall: false
+        #        fileName: ${{ steps.info.outputs.file-name }}.zip
+        zipBall: true
         out-file-path: umka
+        extract: true
+        token: "${{ inputs.token }}"
     - name: Install umka
       if: ${{ steps.info.outputs.umka-installed == 'false' }}
       run: |
+        ls -la ${GITHUB_WORKSPACE}
+        echo "====="
+        ls -la ${GITHUB_WORKSPACE}/umka
         ./install-umka.sh \
           "${{ steps.info.outputs.file-name }}" \
           "${{ steps.info.outputs.umka-path }}"
