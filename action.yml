@@ -46,15 +46,11 @@ runs:
       run: |
         echo "${{ steps.release.outputs.tag_name }}"
         echo "====="
-        echo "${{ steps.release.outputs.downloaded_files }}"
-        echo "====="
         ls -la ${GITHUB_WORKSPACE}
         echo "====="
         ls -la ${GITHUB_WORKSPACE}/umka
         echo "====="
         ls -la ${GITHUB_WORKSPACE}/umka/umka_1.3.1_linux
-        ./install-umka.sh \
-          "${{ steps.info.outputs.file-name }}" \
-          "${{ steps.info.outputs.umka-path }}"
+        ./install-umka.sh "${{ steps.release.outputs.tag_name }}"
       shell: sh
       working-directory: "${{ github.action_path }}/src"

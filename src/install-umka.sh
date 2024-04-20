@@ -1,11 +1,12 @@
 #!/usr/bin/env sh
 
-file_name="$1"
-umka_path="$1"
+# removing 'v' prefix: v1.2.3 -> 1.2.3
+tag="${1#v}"
 
-unzip "${file_name}.zip"
-rm -f "${file_name}.zip"
-if [ "${RUNNER_OS}" != "Windows" ]; then
-  chmod +x "${umka_path}/${file_name}/umka"
+os="linux"
+if [ "${RUNNER_OS}" = "windows" ]; then
+  os="windows_mingw"
+else
+  chmod +x "${GITHUB_WORKSPACE}/umka/umka_${tag}_${os}/umka"
 fi
-echo "${umka_path}/${file_name}" >> "$GITHUB_PATH"
+echo "${GITHUB_WORKSPACE}/umka/umka_${tag}_${os}" >> "$GITHUB_PATH"
