@@ -49,6 +49,8 @@ runs:
         ls -la ${GITHUB_WORKSPACE}
         echo "====="
         ls -la ${GITHUB_WORKSPACE}/umka
+        echo "====="
+        ls -la ${GITHUB_WORKSPACE}/umka/umka_1.3.1_linux
         ./install-umka.sh \
           "${{ steps.info.outputs.file-name }}" \
           "${{ steps.info.outputs.umka-path }}"
