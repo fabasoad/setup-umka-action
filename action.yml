@@ -25,19 +25,18 @@ runs:
       shell: sh
     - name: Collect info
       id: info
-      env:
-        INPUT_VERSION: "${{ inputs.version }}"
-      run: ./collect-info.sh "${INPUT_VERSION}"
+      run: ./collect-info.sh
       shell: sh
       working-directory: "${{ github.action_path }}/src"
     - name: Download umka
       if: ${{ steps.info.outputs.umka-installed == 'false' }}
+      id: release
       uses: robinraju/release-downloader@v1.9
       with:
         repository: vtereshkov/umka-lang
         latest: ${{ inputs.version == 'latest' }}
         tag: ${{ inputs.version == 'latest' && '' || format('v{0}', inputs.version) }}
-        fileName: "*linux*"
+        fileName: "umka_*${{ runner.os == 'Linux' && 'linux' || 'windows' }}*"
         zipBall: true
         out-file-path: umka
         extract: true
@@ -45,6 +44,8 @@ runs:
     - name: Install umka
       if: ${{ steps.info.outputs.umka-installed == 'false' }}
       run: |
+        echo "${{ steps.release.outputs.downloaded_files }}"
+        echo "====="
         ls -la ${GITHUB_WORKSPACE}
         echo "====="
         ls -la ${GITHUB_WORKSPACE}/umka
