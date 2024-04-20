@@ -44,6 +44,8 @@ runs:
     - name: Install umka
       if: ${{ steps.info.outputs.umka-installed == 'false' }}
       run: |
+        echo "${{ steps.release.outputs.tag_name }}"
+        echo "====="
         echo "${{ steps.release.outputs.downloaded_files }}"
         echo "====="
         ls -la ${GITHUB_WORKSPACE}
