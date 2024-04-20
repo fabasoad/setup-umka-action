@@ -9,46 +9,56 @@ inputs:
   version:
     description: "Umka version."
     required: false
-    default: "latest"
-  token:
-    description: "The GitHub token or personal access token"
-    required: false
-    default: "${{ github.token }}"
+    default: "1.3.1"
 runs:
   using: "composite"
   steps:
     - name: Fail
       if: ${{ runner.os == 'macOS' }}
-      run: |
-        echo "::error title=OS is not supported::${RUNNER_OS} ${RUNNER_ARCH} is not supported"
-        exit 1
+      run: echo "::error::${RUNNER_OS} ${RUNNER_ARCH} is not supported" && exit 1
       shell: sh
     - name: Collect info
+      if: ${{ runner.os != 'macOS' }}
       id: info
-      run: ./collect-info.sh
+      env:
+        INPUT_VERSION: "${{ inputs.version }}"
+      run: |
+        if [ "${RUNNER_OS}" = "Linux" ]; then
+          bin_name=linux
+          exec_name=umka
+        else
+          bin_name=windows_mingw
+          exec_name=umka.exe
+        fi
+        echo "umka-installed=$(if command -v "${exec_name}" >/dev/null 2>&1; then echo true; else echo false; fi)" >> "$GITHUB_OUTPUT"
+        mkdir -p "${GITHUB_WORKSPACE}/umka"
+        echo "umka-path=${GITHUB_WORKSPACE}/umka" >> "$GITHUB_OUTPUT"
+        file_name="umka_${INPUT_VERSION}"
+        if [ "${INPUT_VERSION}" != "1.3" ] && [ "${INPUT_VERSION}" != "1.3.1" ]; then
+          file_name="${file_name}_x86-64"
+        fi
+        file_name="${file_name}_${bin_name}"
+        echo "file-name=${file_name}" >> "$GITHUB_OUTPUT"
       shell: sh
-      working-directory: "${{ github.action_path }}/src"
     - name: Download umka
       if: ${{ steps.info.outputs.umka-installed == 'false' }}
-      id: release
       uses: robinraju/release-downloader@v1.9
       with:
         repository: vtereshkov/umka-lang
-        latest: ${{ inputs.version == 'latest' }}
-        tag: ${{ inputs.version == 'latest' && '' || format('v{0}', inputs.version) }}
-        fileName: "umka_*${{ runner.os == 'Linux' && 'linux' || 'windows' }}*"
-        zipBall: true
-        out-file-path: "${{ github.run_id }}"
-        extract: true
-        token: "${{ inputs.token }}"
+        latest: false
+        tag: v${{ inputs.version }}
+        fileName: ${{ steps.info.outputs.file-name }}.zip
+        tarBall: false
+        zipBall: false
+        out-file-path: umka
     - name: Install umka
       if: ${{ steps.info.outputs.umka-installed == 'false' }}
       run: |
-        echo "${{ steps.release.outputs.tag_name }}"
-        echo "====="
-        ./install-umka-2.sh "${{ fromJson(steps.release.outputs.downloaded_files)[0] }}"
-      #        ./install-umka.sh \
-      #          "${{ steps.release.outputs.tag_name }}" \
-      #          "${{ github.run_id }}"
+        unzip "${{ steps.info.outputs.file-name }}.zip"
+        rm -f "${{ steps.info.outputs.file-name }}.zip"
+        if [ "${RUNNER_OS}" != "Windows" ]; then
+          chmod +x "${{ steps.info.outputs.umka-path }}/${{ steps.info.outputs.file-name }}/umka"
+        fi
+        echo "${{ steps.info.outputs.umka-path }}/${{ steps.info.outputs.file-name }}" >> "$GITHUB_PATH"
       shell: sh
-      working-directory: "${{ github.action_path }}/src"
+      working-directory: ${{ steps.info.outputs.umka-path }}

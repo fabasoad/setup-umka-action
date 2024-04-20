@@ -11,10 +11,6 @@ on: # yamllint disable-line rule:truthy
     branches:
       - "main"
 
-concurrency:
-  group: "${{ github.workflow }}-${{ github.ref }}"
-  cancel-in-progress: true
-
 defaults:
   run:
     shell: sh
@@ -37,8 +33,4 @@ jobs:
         with:
           version: ${{ matrix.version }}
       - name: Run script
-        run: |
-          echo "$PATH"
-          echo "===="
-          pwd
-          umka ./hello-world.um
+        run: umka ./hello-world.um
