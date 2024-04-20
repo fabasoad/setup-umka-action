@@ -38,7 +38,7 @@ runs:
         tag: ${{ inputs.version == 'latest' && '' || format('v{0}', inputs.version) }}
         fileName: "umka_*${{ runner.os == 'Linux' && 'linux' || 'windows' }}*"
         zipBall: true
-        out-file-path: umka
+        out-file-path: "${{ github.run_id }}"
         extract: true
         token: "${{ inputs.token }}"
     - name: Install umka
@@ -46,6 +46,8 @@ runs:
       run: |
         echo "${{ steps.release.outputs.tag_name }}"
         echo "====="
-        ./install-umka.sh "${{ steps.release.outputs.tag_name }}"
+        ./install-umka.sh \
+          "${{ steps.release.outputs.tag_name }}" \
+          "${{ github.run_id }}"
       shell: sh
       working-directory: "${{ github.action_path }}/src"
