@@ -37,7 +37,7 @@ runs:
         repository: vtereshkov/umka-lang
         latest: ${{ inputs.version == 'latest' }}
         tag: ${{ inputs.version == 'latest' && '' || format('v{0}', inputs.version) }}
-        #        fileName: ${{ steps.info.outputs.file-name }}.zip
+        fileName: "*linux*"
         zipBall: true
         out-file-path: umka
         extract: true
