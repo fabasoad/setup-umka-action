@@ -6,7 +6,7 @@
 ![security](https://github.com/fabasoad/setup-umka-action/actions/workflows/security.yml/badge.svg)
 ![linting](https://github.com/fabasoad/setup-umka-action/actions/workflows/linting.yml/badge.svg)
 
-This action sets up a [Umka](https://github.com/vtereshkov/umka-lang).
+This action sets up [Umka](https://github.com/vtereshkov/umka-lang).
 
 ## Prerequisites
 
