@@ -42,7 +42,7 @@ runs:
       shell: sh
     - name: Download umka
       if: ${{ steps.info.outputs.umka-installed == 'false' }}
-      uses: robinraju/release-downloader@v1.10
+      uses: robinraju/release-downloader@v1.11
       with:
         repository: vtereshkov/umka-lang
         latest: false
