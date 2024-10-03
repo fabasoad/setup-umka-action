@@ -8,19 +8,29 @@
 
 This action sets up [Umka](https://github.com/vtereshkov/umka-lang).
 
+## Supported OS
+
+<!-- prettier-ignore-start -->
+| OS      |                    |
+|---------|--------------------|
+| Windows | :white_check_mark: |
+| Linux   | :white_check_mark: |
+| macOS   | :x:                |
+<!-- prettier-ignore-end -->
+
 ## Prerequisites
 
-The following tools have to be installed for successful work of this GitHub action:
-`unzip`.
+The following tools have to be available on a runner prior using this GitHub
+action:
 
-> `Windows` and `Linux` are the only supported OS at this moment
+- `unzip`
 
 ## Inputs
 
 <!-- prettier-ignore-start -->
-| Name    | Required | Description                                                                             | Default | Possible values    |
-|---------|----------|-----------------------------------------------------------------------------------------|---------|--------------------|
-| version | No       | Umka version that can be found [here](https://github.com/vtereshkov/umka-lang/releases) | `1.4.1` | `1.4`, `1.3`, etc. |
+| Name    | Required | Description                                                                             | Default | Possible values      |
+|---------|----------|-----------------------------------------------------------------------------------------|---------|----------------------|
+| version | No       | Umka version that can be found [here](https://github.com/vtereshkov/umka-lang/releases) | `1.5`   | `1.4`, `1.4.1`, etc. |
 <!-- prettier-ignore-end -->
 
 ## Example usage
