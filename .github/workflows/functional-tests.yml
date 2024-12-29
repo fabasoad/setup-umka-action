@@ -100,6 +100,8 @@ jobs:
       matrix:
         force: ["true", "false"]
     steps:
+      - name: Checkout ${{ github.repository }}
+        uses: actions/checkout@v4
       - name: Setup Umka 1
         id: setup-umka-1
         uses: ./
