@@ -29,6 +29,9 @@ None.
   with:
     # (Optional) Umka version. Defaults to the latest version.
     version: "1.5.1"
+    # (Optional) If "false" skips installation if umka is already installed. If
+    # "true" installs umka in any case. Defaults to "false".
+    force: "false"
     # (Optional) GitHub token that is used to send requests to GitHub API such
     # as downloading asset. Defaults to the token provided by GitHub Actions
     # environment.

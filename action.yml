@@ -10,6 +10,12 @@ inputs:
     description: Umka version. Defaults to the latest version.
     required: false
     default: "latest"
+  force:
+    description: |
+      If "false" skips installation if umka is already installed. If "true"
+      installs umka in any case. Defaults to "false".
+    required: false
+    default: "false"
   github-token:
     description: |
       GitHub token that is used to send requests to GitHub API such as downloading
@@ -31,8 +37,15 @@ runs:
       shell: sh
     - name: Collect info
       id: info
+      env:
+        INPUT_FORCE: "${{ inputs.force }}"
       run: |
-        echo "bin-installed=$(if command -v umka >/dev/null 2>&1; then echo true; else echo false; fi)" >> "$GITHUB_OUTPUT"
+        if [ "${INPUT_FORCE}" = "false" ] && command -v umka >/dev/null 2>&1; then
+          bin_installed="true"
+        else
+          bin_installed="false"
+        fi
+        echo "bin-installed=${bin_installed}" >> "$GITHUB_OUTPUT"
         bin_dir="umka_$(date +%s)"
         bin_path="${GITHUB_WORKSPACE}/${bin_dir}"
         mkdir -p "${bin_path}"
