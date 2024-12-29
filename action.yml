@@ -30,8 +30,6 @@ runs:
         mkdir -p "${umka_bin_path}"
         echo "umka-dir=${umka_bin_dir}" >> "$GITHUB_OUTPUT"
         echo "umka-path=${umka_bin_path}" >> "$GITHUB_OUTPUT"
-        echo "umka-version=${UMKA_VERSION}" >> "$GITHUB_OUTPUT"
-        echo "umka-filename=umka_${UMKA_VERSION}_${{ runner.os == 'Linux' && 'linux' || 'windows_mingw' }}" >> "$GITHUB_OUTPUT"
       shell: sh
     - name: Get version from latest release
       if: ${{ steps.info.outputs.umka-installed == 'false' && inputs.version == 'latest' }}
@@ -49,21 +47,25 @@ runs:
     - name: Download umka
       if: ${{ steps.info.outputs.umka-installed == 'false' }}
       uses: robinraju/release-downloader@v1
+      env:
+        UMKA_VERSION: "${{ inputs.version == 'latest' && steps.latest-release.outputs.version || inputs.version }}"
       with:
         repository: "vtereshkov/umka-lang"
         latest: "false"
-        tag: "v${{ steps.info.outputs.umka-version }}"
-        fileName: "${{ steps.info.outputs.umka-filename }}.zip"
+        tag: "v${{ env.UMKA_VERSION }}"
+        fileName: "umka_${{ env.UMKA_VERSION }}_${{ runner.os == 'Linux' && 'linux' || 'windows_mingw' }}.zip"
         zipBall: "true"
         extract: "true"
         out-file-path: "${{ steps.info.outputs.umka-dir }}"
     - name: Install umka
       if: ${{ steps.info.outputs.umka-installed == 'false' }}
+      env:
+        UMKA_VERSION: "${{ inputs.version == 'latest' && steps.latest-release.outputs.version || inputs.version }}"
       run: |
-        ls -la .
+        bin_dir="umka_${UMKA_VERSION}_${{ runner.os == 'Linux' && 'linux' || 'windows_mingw' }}"
+        bin_path="${{ steps.info.outputs.umka-path }}/${bin_dir}"
         if [ "${RUNNER_OS}" != "Windows" ]; then
-          chmod +x umka
+          chmod +x "${bin_path}/umka"
         fi
-        echo "$(pwd)" >> "$GITHUB_PATH"
+        echo "${bin_path}" >> "$GITHUB_PATH"
       shell: sh
-      working-directory: "${{ steps.info.outputs.umka-path }}/${{ steps.info.outputs.umka-filename }}"
