@@ -7,9 +7,15 @@ branding:
   color: gray-dark
 inputs:
   version:
-    description: "Umka version."
+    description: Umka version.
     required: false
     default: "latest"
+  github-token:
+    description: |
+      GitHub token that is used to send requests to GitHub API such as downloading
+      asset. Defaults to the token provided by GitHub Actions environment.
+    required: false
+    default: ${{ github.token }}
 runs:
   using: "composite"
   steps:
@@ -30,7 +36,7 @@ runs:
         echo "bin-path=${bin_path}" >> "$GITHUB_OUTPUT"
       shell: sh
     - name: Download binary
-      if: ${{ steps.info.outputs.umka-installed == 'false' }}
+      if: ${{ steps.info.outputs.bin-installed == 'false' }}
       id: download-binary
       uses: robinraju/release-downloader@v1
       with:
@@ -40,8 +46,9 @@ runs:
         fileName: "umka_*_${{ runner.os == 'Linux' && 'linux' || 'windows_mingw' }}.zip"
         extract: "true"
         out-file-path: "${{ steps.info.outputs.bin-dir }}"
+        token: "${{ inputs.github-token }}"
     - name: Install umka
-      if: ${{ steps.info.outputs.umka-installed == 'false' }}
+      if: ${{ steps.info.outputs.bin-installed == 'false' }}
       run: |
         tag_name="${{ steps.download-binary.outputs.tag_name }}"
         bin_path="${{ steps.info.outputs.bin-path }}/umka_${tag_name#v}_${{ runner.os == 'Linux' && 'linux' || 'windows_mingw' }}"
