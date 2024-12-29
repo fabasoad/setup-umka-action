@@ -7,9 +7,25 @@ branding:
   color: gray-dark
 inputs:
   version:
-    description: "Umka version."
+    description: Umka version. Defaults to the latest version.
     required: false
-    default: "1.5.1"
+    default: "latest"
+  force:
+    description: |
+      If "false" skips installation if umka is already installed. If "true"
+      installs umka in any case. Defaults to "false".
+    required: false
+    default: "false"
+  github-token:
+    description: |
+      GitHub token that is used to send requests to GitHub API such as downloading
+      asset. Defaults to the token provided by GitHub Actions environment.
+    required: false
+    default: ${{ github.token }}
+outputs:
+  installed:
+    description: Whether umka was installed or not.
+    value: "${{ steps.install-umka.outcome == 'success' }}"
 runs:
   using: "composite"
   steps:
@@ -20,43 +36,42 @@ runs:
         exit 1
       shell: sh
     - name: Collect info
-      if: ${{ runner.os != 'macOS' }}
       id: info
       env:
-        INPUT_VERSION: "${{ inputs.version }}"
+        INPUT_FORCE: "${{ inputs.force }}"
       run: |
-        if [ "${RUNNER_OS}" = "Linux" ]; then
-          bin_name=linux
-          exec_name=umka
+        if [ "${INPUT_FORCE}" = "false" ] && command -v umka >/dev/null 2>&1; then
+          bin_installed="true"
         else
-          bin_name=windows_mingw
-          exec_name=umka.exe
+          bin_installed="false"
         fi
-        echo "umka-installed=$(if command -v "${exec_name}" >/dev/null 2>&1; then echo true; else echo false; fi)" >> "$GITHUB_OUTPUT"
-        mkdir -p "${GITHUB_WORKSPACE}/umka"
-        echo "umka-path=${GITHUB_WORKSPACE}/umka" >> "$GITHUB_OUTPUT"
-        file_name="umka_${INPUT_VERSION}_${bin_name}"
-        echo "file-name=${file_name}" >> "$GITHUB_OUTPUT"
+        echo "bin-installed=${bin_installed}" >> "$GITHUB_OUTPUT"
+        bin_dir="umka_$(date +%s)"
+        bin_path="${GITHUB_WORKSPACE}/${bin_dir}"
+        mkdir -p "${bin_path}"
+        echo "bin-dir=${bin_dir}" >> "$GITHUB_OUTPUT"
+        echo "bin-path=${bin_path}" >> "$GITHUB_OUTPUT"
       shell: sh
-    - name: Download umka
-      if: ${{ steps.info.outputs.umka-installed == 'false' }}
-      uses: robinraju/release-downloader@v1.11
+    - name: Download binary
+      if: ${{ steps.info.outputs.bin-installed == 'false' }}
+      id: download-binary
+      uses: robinraju/release-downloader@v1
       with:
-        repository: vtereshkov/umka-lang
-        latest: false
-        tag: v${{ inputs.version }}
-        fileName: ${{ steps.info.outputs.file-name }}.zip
-        tarBall: false
-        zipBall: false
-        out-file-path: umka
+        repository: "vtereshkov/umka-lang"
+        latest: "${{ inputs.version == 'latest' }}"
+        tag: "${{ inputs.version != 'latest' && format('v{0}', inputs.version) || '' }}"
+        fileName: "umka_*_${{ runner.os == 'Linux' && 'linux' || 'windows_mingw' }}.zip"
+        extract: "true"
+        out-file-path: "${{ steps.info.outputs.bin-dir }}"
+        token: "${{ inputs.github-token }}"
     - name: Install umka
-      if: ${{ steps.info.outputs.umka-installed == 'false' }}
+      if: ${{ steps.info.outputs.bin-installed == 'false' }}
+      id: install-umka
       run: |
-        unzip "${{ steps.info.outputs.file-name }}.zip"
-        rm -f "${{ steps.info.outputs.file-name }}.zip"
+        tag_name="${{ steps.download-binary.outputs.tag_name }}"
+        bin_path="${{ steps.info.outputs.bin-path }}/umka_${tag_name#v}_${{ runner.os == 'Linux' && 'linux' || 'windows_mingw' }}"
         if [ "${RUNNER_OS}" != "Windows" ]; then
-          chmod +x "${{ steps.info.outputs.umka-path }}/${{ steps.info.outputs.file-name }}/umka"
+          chmod +x "${bin_path}/umka"
         fi
-        echo "${{ steps.info.outputs.umka-path }}/${{ steps.info.outputs.file-name }}" >> "$GITHUB_PATH"
+        echo "${bin_path}" >> "$GITHUB_PATH"
       shell: sh
-      working-directory: ${{ steps.info.outputs.umka-path }}

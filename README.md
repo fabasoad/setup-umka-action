@@ -20,17 +20,30 @@ This action sets up [Umka](https://github.com/vtereshkov/umka-lang).
 
 ## Prerequisites
 
-The following tools have to be available on a runner prior using this GitHub
-action:
-
-- `unzip`
+None.
 
 ## Inputs
 
+```yaml
+- uses: fabasoad/setup-umka-action@v1
+  with:
+    # (Optional) Umka version. Defaults to the latest version.
+    version: "1.5.1"
+    # (Optional) If "false" skips installation if umka is already installed. If
+    # "true" installs umka in any case. Defaults to "false".
+    force: "false"
+    # (Optional) GitHub token that is used to send requests to GitHub API such
+    # as downloading asset. Defaults to the token provided by GitHub Actions
+    # environment.
+    github-token: "${{ github.token }}"
+```
+
+## Outputs
+
 <!-- prettier-ignore-start -->
-| Name    | Required | Description                                                                             | Default | Possible values      |
-|---------|----------|-----------------------------------------------------------------------------------------|---------|----------------------|
-| version | No       | Umka version that can be found [here](https://github.com/vtereshkov/umka-lang/releases) | `1.5.1` | `1.5`, `1.4.1`, etc. |
+| Name      | Description                       | Example |
+|-----------|-----------------------------------|---------|
+| installed | Whether umka was installed or not | `true`  |
 <!-- prettier-ignore-end -->
 
 ## Example usage
@@ -55,8 +68,8 @@ jobs:
     name: Setup
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@main
-      - uses: fabasoad/setup-umka-action@main
+      - uses: actions/checkout@v4
+      - uses: fabasoad/setup-umka-action@v1
       - name: Run script
         run: umka ./hello-world.um
 ```

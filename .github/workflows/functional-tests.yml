@@ -30,31 +30,46 @@ jobs:
         id: prepare-list
         run: |
           url="https://api.github.com/repos/vtereshkov/umka-lang/releases"
-          versions=$(curl -s "${url}" | jq -c '[.[0:3][].tag_name] | map(sub("^v"; ""))')
+          versions=$(curl -s "${url}" | jq -c '[.[0:3][].tag_name] | map(sub("^v"; "")) | . += ["latest"]')
           echo "versions=${versions}" >> "$GITHUB_OUTPUT"
   run-script:
     name: Run script
     needs: [get-versions]
+    runs-on: ${{ matrix.os }}-latest
     timeout-minutes: 5
     strategy:
       fail-fast: false
       matrix:
         os: ["ubuntu", "windows"]
         version: ${{ fromJSON(needs.get-versions.outputs.versions) }}
-    runs-on: ${{ matrix.os }}-latest
     steps:
       - name: Checkout ${{ github.repository }}
         uses: actions/checkout@v4
       - name: Setup Umka
+        id: setup-umka
         uses: ./
         with:
           version: ${{ matrix.version }}
+      - name: Test action completion
+        run: |
+          test_equal() {
+            if [ "${2}" != "${3}" ]; then
+              echo "::error title=${1}::Expected: ${3}. Actual: ${2}."
+              exit 1
+            fi
+          }
+          test_equal "Wrong completion status" \
+            "${{ steps.setup-umka.outcome }}" \
+            "success"
+          test_equal "umka should not be installed" \
+            "${{ steps.setup-umka.outputs.installed }}" \
+            "true"
       - name: Run script
         run: umka ./hello-world.um
   macos-not-supported:
     name: macOS not supported
-    timeout-minutes: 5
     runs-on: macos-latest
+    timeout-minutes: 5
     steps:
       - name: Checkout ${{ github.repository }}
         uses: actions/checkout@v4
@@ -62,6 +77,50 @@ jobs:
         id: setup-umka
         continue-on-error: true
         uses: ./
-      - name: Validate outcome
-        if: ${{ steps.setup-umka.outcome != 'failure' }}
-        run: exit 1
+      - name: Test action completion
+        run: |
+          test_equal() {
+            if [ "${2}" != "${3}" ]; then
+              echo "::error title=${1}::Expected: ${3}. Actual: ${2}."
+              exit 1
+            fi
+          }
+          test_equal "Wrong completion status" \
+            "${{ steps.setup-umka.outcome }}" \
+            "failure"
+          test_equal "umka should not be installed" \
+            "${{ steps.setup-umka.outputs.installed }}" \
+            "false"
+  test-force:
+    name: Test force
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    strategy:
+      fail-fast: false
+      matrix:
+        force: ["true", "false"]
+    steps:
+      - name: Checkout ${{ github.repository }}
+        uses: actions/checkout@v4
+      - name: Setup Umka 1
+        id: setup-umka-1
+        uses: ./
+      - name: Setup Umka 2
+        id: setup-umka-2
+        uses: ./
+        with:
+          force: ${{ matrix.force }}
+      - name: Test action completion
+        run: |
+          test_equal() {
+            if [ "${2}" != "${3}" ]; then
+              echo "::error title=${1}::Expected: ${3}. Actual: ${2}."
+              exit 1
+            fi
+          }
+          test_equal "Wrong \"installed\" output from setup-umka-1" \
+            "${{ steps.setup-umka-1.outputs.installed }}" \
+            "true"
+          test_equal "Wrong \"installed\" output from setup-umka-2" \
+            "${{ steps.setup-umka-2.outputs.installed }}" \
+            "${{ matrix.force }}"
