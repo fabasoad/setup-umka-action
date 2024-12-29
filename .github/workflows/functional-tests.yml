@@ -4,25 +4,43 @@ name: Functional Tests
 on: # yamllint disable-line rule:truthy
   pull_request:
     paths:
-      - "action.yml"
-      - ".github/workflows/functional-tests.yml"
+      - .github/workflows/functional-tests.yml
+      - action.yml
   push:
     branches:
-      - "main"
+      - main
+  schedule:
+    # Every Friday at 09:00 JST
+    - cron: "0 0 * * 5"
+  workflow_dispatch: {}
 
 defaults:
   run:
     shell: sh
 
 jobs:
+  get-versions:
+    name: Get 3 latest versions
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    outputs:
+      versions: ${{ steps.prepare-list.outputs.versions }}
+    steps:
+      - name: Prepare list
+        id: prepare-list
+        run: |
+          url="https://api.github.com/repos/vtereshkov/umka-lang/releases"
+          versions=$(curl -s "${url}" | jq -c '[.[0:3][].tag_name] | map(sub("^v"; ""))')
+          echo "versions=${versions}" >> "$GITHUB_OUTPUT"
   run-script:
     name: Run script
+    needs: [get-versions]
     timeout-minutes: 5
     strategy:
       fail-fast: false
       matrix:
         os: ["ubuntu", "windows"]
-        version: ["1.4", "1.4.1", "1.5"]
+        version: ${{ fromJSON(needs.get-versions.outputs.versions) }}
     runs-on: ${{ matrix.os }}-latest
     steps:
       - name: Checkout ${{ github.repository }}
@@ -33,3 +51,17 @@ jobs:
           version: ${{ matrix.version }}
       - name: Run script
         run: umka ./hello-world.um
+  macos-not-supported:
+    name: macOS not supported
+    timeout-minutes: 5
+    runs-on: macos-latest
+    steps:
+      - name: Checkout ${{ github.repository }}
+        uses: actions/checkout@v4
+      - name: Setup Umka
+        id: setup-umka
+        continue-on-error: true
+        uses: ./
+      - name: Validate outcome
+        if: ${{ steps.setup-umka.outcome != 'failure' }}
+        run: exit 1
