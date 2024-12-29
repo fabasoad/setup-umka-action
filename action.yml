@@ -9,7 +9,7 @@ inputs:
   version:
     description: "Umka version."
     required: false
-    default: "1.5.1"
+    default: "latest"
 runs:
   using: "composite"
   steps:
@@ -33,27 +33,32 @@ runs:
           exec_name=umka.exe
         fi
         echo "umka-installed=$(if command -v "${exec_name}" >/dev/null 2>&1; then echo true; else echo false; fi)" >> "$GITHUB_OUTPUT"
-        mkdir -p "${GITHUB_WORKSPACE}/umka"
-        echo "umka-path=${GITHUB_WORKSPACE}/umka" >> "$GITHUB_OUTPUT"
-        file_name="umka_${INPUT_VERSION}_${bin_name}"
-        echo "file-name=${file_name}" >> "$GITHUB_OUTPUT"
+        echo "file-name=umka_${INPUT_VERSION}_${bin_name}" >> "$GITHUB_OUTPUT"
+
+        umka_bin_dir="$(date +%s)"
+        umka_bin_path="${GITHUB_WORKSPACE}/${umka_bin_dir}"
+        mkdir -p "${umka_bin_path}"
+        echo "umka-dir=${umka_bin_dir}" >> "$GITHUB_OUTPUT"
+        echo "umka-path=${umka_bin_path}" >> "$GITHUB_OUTPUT"
       shell: sh
     - name: Download umka
       if: ${{ steps.info.outputs.umka-installed == 'false' }}
-      uses: robinraju/release-downloader@v1.11
+      uses: robinraju/release-downloader@v1
       with:
-        repository: vtereshkov/umka-lang
-        latest: false
-        tag: v${{ inputs.version }}
-        fileName: ${{ steps.info.outputs.file-name }}.zip
-        tarBall: false
-        zipBall: false
-        out-file-path: umka
+        repository: "vtereshkov/umka-lang"
+        latest: "${{ inputs.version == 'latest' }}"
+        tag: "v${{ inputs.version }}"
+        fileName: "${{ steps.info.outputs.file-name }}.zip"
+        tarBall: "false"
+        zipBall: "true"
+        extract: "true"
+        out-file-path: "${{ steps.info.outputs.umka-dir }}"
     - name: Install umka
       if: ${{ steps.info.outputs.umka-installed == 'false' }}
       run: |
-        unzip "${{ steps.info.outputs.file-name }}.zip"
-        rm -f "${{ steps.info.outputs.file-name }}.zip"
+        ls -la .
+        # unzip "${{ steps.info.outputs.file-name }}.zip"
+        # rm -f "${{ steps.info.outputs.file-name }}.zip"
         if [ "${RUNNER_OS}" != "Windows" ]; then
           chmod +x "${{ steps.info.outputs.umka-path }}/${{ steps.info.outputs.file-name }}/umka"
         fi

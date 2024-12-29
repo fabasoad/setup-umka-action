@@ -30,7 +30,7 @@ jobs:
         id: prepare-list
         run: |
           url="https://api.github.com/repos/vtereshkov/umka-lang/releases"
-          versions=$(curl -s "${url}" | jq -c '[.[0:3][].tag_name] | map(sub("^v"; ""))')
+          versions=$(curl -s "${url}" | jq -c '[.[0:3][].tag_name] | map(sub("^v"; "")) | . += ["latest"]')
           echo "versions=${versions}" >> "$GITHUB_OUTPUT"
   run-script:
     name: Run script
