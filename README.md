@@ -30,7 +30,7 @@ action:
 <!-- prettier-ignore-start -->
 | Name    | Required | Description                                                                             | Default | Possible values      |
 |---------|----------|-----------------------------------------------------------------------------------------|---------|----------------------|
-| version | No       | Umka version that can be found [here](https://github.com/vtereshkov/umka-lang/releases) | `1.5`   | `1.4`, `1.4.1`, etc. |
+| version | No       | Umka version that can be found [here](https://github.com/vtereshkov/umka-lang/releases) | `1.5.1` | `1.5`, `1.4.1`, etc. |
 <!-- prettier-ignore-end -->
 
 ## Example usage
