@@ -59,7 +59,7 @@ runs:
       with:
         repository: "vtereshkov/umka-lang"
         latest: "${{ inputs.version == 'latest' }}"
-        tag: "${{ inputs.version == 'latest' && '' || format('v{0}', inputs.version) }}"
+        tag: "${{ inputs.version != 'latest' && format('v{0}', inputs.version) || '' }}"
         fileName: "umka_*_${{ runner.os == 'Linux' && 'linux' || 'windows_mingw' }}.zip"
         extract: "true"
         out-file-path: "${{ steps.info.outputs.bin-dir }}"
