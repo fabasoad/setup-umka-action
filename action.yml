@@ -7,7 +7,7 @@ branding:
   color: gray-dark
 inputs:
   version:
-    description: Umka version.
+    description: Umka version. Defaults to the latest version.
     required: false
     default: "latest"
   github-token:
@@ -16,6 +16,10 @@ inputs:
       asset. Defaults to the token provided by GitHub Actions environment.
     required: false
     default: ${{ github.token }}
+outputs:
+  installed:
+    description: Whether umka was installed or not.
+    value: "${{ steps.install-umka.outcome == 'success' }}"
 runs:
   using: "composite"
   steps:
@@ -49,6 +53,7 @@ runs:
         token: "${{ inputs.github-token }}"
     - name: Install umka
       if: ${{ steps.info.outputs.bin-installed == 'false' }}
+      id: install-umka
       run: |
         tag_name="${{ steps.download-binary.outputs.tag_name }}"
         bin_path="${{ steps.info.outputs.bin-path }}/umka_${tag_name#v}_${{ runner.os == 'Linux' && 'linux' || 'windows_mingw' }}"
