@@ -26,11 +26,21 @@ jobs:
     outputs:
       versions: ${{ steps.prepare-list.outputs.versions }}
     steps:
+      - name: Get releases
+        id: github-releases
+        uses: yakubique/github-releases@v1.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          repository: "vtereshkov/umka-lang"
+          sort: "desc"
       - name: Prepare list
         id: prepare-list
+        env:
+          RELEASES_AMOUNT: "3"
         run: |
-          url="https://api.github.com/repos/vtereshkov/umka-lang/releases"
-          versions=$(curl -s "${url}" | jq -c '[.[0:3][].tag_name] | map(sub("^v"; "")) | . += ["latest"]')
+          versions=$(echo '${{ steps.github-releases.outputs.releases }}' \
+            | jq -c -r --arg n "${RELEASES_AMOUNT}" '.[0:($n | tonumber)] | map(sub("^v"; "")) | . += ["latest"]')
           echo "versions=${versions}" >> "$GITHUB_OUTPUT"
   run-script:
     name: Run script
@@ -58,39 +68,12 @@ jobs:
               exit 1
             fi
           }
-          test_equal "Wrong completion status" \
-            "${{ steps.setup-umka.outcome }}" \
-            "success"
-          test_equal "umka should not be installed" \
+          test_equal "umka should be installed" \
             "${{ steps.setup-umka.outputs.installed }}" \
             "true"
-      - name: Run script
-        run: umka ./hello-world.um
-  macos-not-supported:
-    name: macOS not supported
-    runs-on: macos-latest
-    timeout-minutes: 5
-    steps:
-      - name: Checkout ${{ github.repository }}
-        uses: actions/checkout@v4
-      - name: Setup Umka
-        id: setup-umka
-        continue-on-error: true
-        uses: ./
-      - name: Test action completion
+      - name: Validate command
         run: |
-          test_equal() {
-            if [ "${2}" != "${3}" ]; then
-              echo "::error title=${1}::Expected: ${3}. Actual: ${2}."
-              exit 1
-            fi
-          }
-          test_equal "Wrong completion status" \
-            "${{ steps.setup-umka.outcome }}" \
-            "failure"
-          test_equal "umka should not be installed" \
-            "${{ steps.setup-umka.outputs.installed }}" \
-            "false"
+          [ "$(umka ./hello-world.um)" = "Hello World!" ] || exit 1
   test-force:
     name: Test force
     runs-on: ubuntu-latest

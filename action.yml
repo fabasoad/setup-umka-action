@@ -35,23 +35,23 @@ runs:
         echo "::error title=OS is not supported::${RUNNER_OS} ${RUNNER_ARCH} is not supported"
         exit 1
       shell: sh
+
+    - name: Validate inputs
+      env:
+        INPUT_VERSION: "${{ inputs.version }}"
+        INPUT_FORCE: "${{ inputs.force }}"
+      run: ./validate-inputs.sh "${INPUT_VERSION}" "${INPUT_FORCE}"
+      shell: sh
+      working-directory: ${{ github.action_path }}/src
+
     - name: Collect info
       id: info
       env:
         INPUT_FORCE: "${{ inputs.force }}"
-      run: |
-        if [ "${INPUT_FORCE}" = "false" ] && command -v umka >/dev/null 2>&1; then
-          bin_installed="true"
-        else
-          bin_installed="false"
-        fi
-        echo "bin-installed=${bin_installed}" >> "$GITHUB_OUTPUT"
-        bin_dir="umka_$(date +%s)"
-        bin_path="${GITHUB_WORKSPACE}/${bin_dir}"
-        mkdir -p "${bin_path}"
-        echo "bin-dir=${bin_dir}" >> "$GITHUB_OUTPUT"
-        echo "bin-path=${bin_path}" >> "$GITHUB_OUTPUT"
+      run: ./collect-info.sh "${INPUT_FORCE}"
       shell: sh
+      working-directory: "${{ github.action_path }}/src"
+
     - name: Download binary
       if: ${{ steps.info.outputs.bin-installed == 'false' }}
       id: download-binary
@@ -64,6 +64,7 @@ runs:
         extract: "true"
         out-file-path: "${{ steps.info.outputs.bin-dir }}"
         token: "${{ inputs.github-token }}"
+
     - name: Install umka
       if: ${{ steps.info.outputs.bin-installed == 'false' }}
       id: install-umka
@@ -75,3 +76,10 @@ runs:
         fi
         echo "${bin_path}" >> "$GITHUB_PATH"
       shell: sh
+
+    - name: Print location
+      run: |
+        . ./logging.sh
+        log_info "umka is located at $(which umka)"
+      shell: sh
+      working-directory: "${{ github.action_path }}/src/lib"
