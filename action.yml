@@ -62,7 +62,9 @@ runs:
       id: install-umka
       run: |
         tag_name="${{ steps.download-binary.outputs.tag_name }}"
+        ls -la "${{ steps.info.outputs.bin-path }}"
         bin_path="${{ steps.info.outputs.bin-path }}/umka_${tag_name#v}_${{ runner.os == 'Linux' && 'linux' || 'windows_mingw' }}"
+        ls -la "${bin_path}"
         if [ "${RUNNER_OS}" != "Windows" ]; then
           chmod +x "${bin_path}/umka"
         fi
