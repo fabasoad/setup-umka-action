@@ -65,11 +65,13 @@ runs:
         bin_path="${{ steps.info.outputs.bin-path }}/umka_${tag_name#v}_${{ runner.os == 'Linux' && 'linux' || 'windows_mingw' }}"
         if [ "${RUNNER_OS}" != "Windows" ]; then
           chmod +x "${bin_path}/umka"
-          ${bin_path}/umka --version
         fi
         echo "${bin_path}" >> "$GITHUB_PATH"
       shell: sh
 
-    - name: Print version
-      run: umka --version
+    - name: Print location
+      run: |
+        . ./logging.sh
+        log_info "umka is located at $(which umka)"
       shell: sh
+      working-directory: "${{ github.action_path }}/src/lib"
