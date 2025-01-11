@@ -80,3 +80,7 @@ jobs:
 Run umka ./hello-world.um
 Hello World!
 ```
+
+## Contributions
+
+![Alt](https://repobeats.axiom.co/api/embed/e31d86e6918863b220dc3cc4123dde1567c84505.svg "Repobeats analytics image")
