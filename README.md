@@ -28,7 +28,7 @@ None.
 - uses: fabasoad/setup-umka-action@v1
   with:
     # (Optional) Umka version. Defaults to the latest version.
-    version: "1.5.1"
+    version: "1.5.4"
     # (Optional) If "false" skips installation if umka is already installed. If
     # "true" installs umka in any case. Defaults to "false".
     force: "false"
