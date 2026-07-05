@@ -55,12 +55,12 @@ runs:
     - name: Download binary
       if: ${{ steps.info.outputs.bin-installed == 'false' }}
       id: download-binary
-      uses: robinraju/release-downloader@v1
+      uses: robinraju/release-downloader@28fc21f50d76778e7023361aa1f863e717d3d56f # v1.13
       with:
         repository: "vtereshkov/umka-lang"
         latest: "${{ inputs.version == 'latest' }}"
-        tag: "${{ inputs.version != 'latest' && format('v{0}', inputs.version) || '' }}"
-        fileName: "umka_*_${{ runner.os == 'Linux' && 'linux' || 'windows_mingw' }}.zip"
+        tag: "${{ case(inputs.version == 'latest', '', format('v{0}', inputs.version)) }}"
+        fileName: "umka_*_${{ case(runner.os == 'Linux', 'linux', 'windows_mingw') }}.zip"
         extract: "true"
         out-file-path: "${{ steps.info.outputs.bin-dir }}"
         token: "${{ inputs.github-token }}"
@@ -68,9 +68,11 @@ runs:
     - name: Install umka
       if: ${{ steps.info.outputs.bin-installed == 'false' }}
       id: install-umka
+      env:
+        STEP_DOWNLOAD_BINARY_OUTPUT_TAG_NAME: "${{ steps.download-binary.outputs.tag_name }}"
+        STEP_INFO_OUTPUT_BIN_PATH: "${{ steps.info.outputs.bin-path }}"
       run: |
-        tag_name="${{ steps.download-binary.outputs.tag_name }}"
-        bin_path="${{ steps.info.outputs.bin-path }}/umka_${tag_name#v}_${{ runner.os == 'Linux' && 'linux' || 'windows_mingw' }}"
+        bin_path="${STEP_INFO_OUTPUT_BIN_PATH}/umka_${STEP_DOWNLOAD_BINARY_OUTPUT_TAG_NAME#v}_${{ case(runner.os == 'Linux', 'linux', 'windows_mingw') }}"
         if [ "${RUNNER_OS}" != "Windows" ]; then
           chmod +x "${bin_path}/umka"
         fi
